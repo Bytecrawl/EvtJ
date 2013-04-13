@@ -15,7 +15,7 @@ public class Gateway implements Runnable {
 	
 	public void run()
 	{
-		while(server.initialising()) {};
+		while(server.isInitialising()) {};
 		while(server.isActive())
 		{
 			if(server.isPaused()) {

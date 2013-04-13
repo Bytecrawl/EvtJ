@@ -19,7 +19,7 @@ public class Handler implements Runnable {
 	public void run()
 	{
 		while(!Thread.currentThread().isInterrupted()) {
-			while(server.initialising()) {};
+			while(server.isInitialising()) {};
 			while(server.isActive() && !Thread.currentThread().isInterrupted())
 			{
 				while(server.isPaused()) {};

@@ -10,18 +10,6 @@ import bytecrawl.evtj.NetEvent;
 
 public class EvtJServer {
 
-	private boolean 		active;
-	private boolean			paused;
-	private boolean			initialising;
-	private int				accepted_clients;
-	private ServerSocket	server_socket;
-	private List<Socket> 	socket_book;
-	private List<NetEvent>	events_book;
-	private Thread 			gateway_thread;
-	private Thread			handler_thread;
-	
-	private int port;
-
 	public EvtJServer(int port)
 	{
 		try
@@ -38,16 +26,16 @@ public class EvtJServer {
 		}
 	}
 	
-	public synchronized boolean isActive()		{ return active; }
-	public synchronized boolean isPaused()		{ return paused; }
-	public synchronized boolean initialising()	{ return initialising; }
+	public synchronized boolean isActive() { return active; }
+	public synchronized boolean isPaused() { return paused; }
+	public synchronized boolean isInitialising() { return initialising; }
 	
-	public int			getAcceptedClients()	{ return accepted_clients; }
-	public ServerSocket getServerSocket() 		{ return server_socket; }
-	public List<Socket>	getSocketBook() 		{ return socket_book; }
+	public int	getAcceptedClients() { return accepted_clients; }
+	public ServerSocket getServerSocket() { return server_socket; }
+	public List<Socket>	getSocketBook() { return socket_book; }
 
-	public void pause() 						{ paused = true; }
-	public void resume() 						{ paused = false; }
+	public void pause() { paused = true; }
+	public void resume() { paused = false; }
 	
 	public void addSocketToBook(Socket s)
 	{
@@ -97,5 +85,20 @@ public class EvtJServer {
 		while(handler_thread.isAlive()) {};
 		System.out.println("Server stopped\n");
 	}
+	
+	private boolean active;
+	private boolean	paused;
+	private boolean	initialising;
+	private int accepted_clients;
+	
+	private ServerSocket server_socket;
+	
+	private List<Socket> socket_book;
+	private List<NetEvent> events_book;
+	
+	private Thread gateway_thread;
+	private Thread handler_thread;
+	
+	private int port;
 	
 }
