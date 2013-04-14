@@ -95,10 +95,12 @@ public class SocketEngine {
 	{
 		try
 		{
-			if(sck!=null)
-				sck.close();
+			bw.flush();
+			bw.close();
+			br.close();
+			sck.close();
 		}catch(IOException e){
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 		}
 	}
 	
