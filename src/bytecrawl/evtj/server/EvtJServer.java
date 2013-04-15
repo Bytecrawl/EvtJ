@@ -86,7 +86,7 @@ public class EvtJServer {
 		queued_events--;
 	}
 	
-	public void start_handler()
+	private void start_handler()
 	{
 		EventHandler handler = new EventHandler(this);
 		handler_executor = new EvtJExecutor(this, handler);
@@ -94,7 +94,7 @@ public class EvtJServer {
 		while(!handler_executor.isAlive()) {};
 	}
 	
-	public void start_gateway()
+	private void start_gateway()
 	{
 		GatewayHandler handler = new GatewayHandler(this);
 		gateway_executor = new EvtJExecutor(this, handler);
@@ -102,7 +102,7 @@ public class EvtJServer {
 		while(!gateway_executor.isAlive()) {}
 	}
 	
-	public void start_expeditor()
+	private void start_expeditor()
 	{
 		ExpeditorHandler handler = new ExpeditorHandler(this);
 		expeditor_executor = new EvtJExecutor(this, handler);
