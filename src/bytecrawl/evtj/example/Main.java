@@ -1,4 +1,4 @@
-package bytecrawl.evjt.example;
+package bytecrawl.evtj.example;
 
 import bytecrawl.evtj.SocketEngine;
 import bytecrawl.evtj.server.EvtJServer;
@@ -75,5 +75,6 @@ public class Main {
 		se2.close();
 
 		server.stop();
+		System.exit(0);
 	}
 }
