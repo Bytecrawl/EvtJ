@@ -1,9 +1,16 @@
 package bytecrawl.evtj.server;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.nio.ByteBuffer;
+import java.nio.channels.ClosedChannelException;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
 import java.util.LinkedList;
 import java.util.Stack;
 
@@ -21,8 +28,9 @@ public class EvtJServer {
 	private int connected_clients;
 	private int queued_events; // Unused
 	
-	private ServerSocket server_socket;
-	
+	private ServerSocketChannel server_channel;
+    private Selector selector;
+    
 	private SocketBook socket_book;
 	private LinkedList<NetEvent> event_book;
 	
@@ -38,7 +46,11 @@ public class EvtJServer {
 	{
 		try
 		{
-			server_socket = new ServerSocket(port);
+			selector = Selector.open();
+			server_channel = ServerSocketChannel.open();
+			server_channel.configureBlocking(false);
+			server_channel.socket().bind(new InetSocketAddress(port));
+			server_channel.register(selector, SelectionKey.OP_ACCEPT);
 			socket_book = new SocketBook();
 			event_book = new LinkedList<NetEvent>();
 		}catch(IOException e){
@@ -55,17 +67,25 @@ public class EvtJServer {
 	public synchronized boolean isInitialising() { return initialising; }
 	
 	public synchronized int getConnectedClients() { return connected_clients; }
-	public synchronized ServerSocket getServerSocket() { return server_socket; }
+	public synchronized Selector getSelector() { return selector; }
 	public synchronized SocketBook getSocketBook() { return socket_book; }
 	public synchronized LinkedList<NetEvent> getEventBook() { return event_book; }
 
 	public synchronized void pause() { paused = true; }
 	public synchronized void resume() { paused = false; }
 	
-	public synchronized void addSocketToBook(Socket s)
+	public synchronized boolean addClientToBook(SocketChannel client)
 	{
-		socket_book.add(s);
-		connected_clients++;
+		try {
+			client.configureBlocking(false);
+	    	client.register(selector, SelectionKey.OP_READ);
+		} catch (IOException e) {
+			return false;
+		}finally{
+			socket_book.add(client);
+			connected_clients++;
+		}
+		return true;
 	}
 	
 	public synchronized void removeSocketFromBook(int index)
@@ -84,6 +104,16 @@ public class EvtJServer {
 	{
 		event_book.remove(index);
 		queued_events--;
+	}
+	
+	public synchronized void registerRead(SocketChannel ch)
+	{
+		try {
+			ch.register(selector, SelectionKey.OP_READ);
+		} catch (ClosedChannelException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	private void start_handler()
@@ -131,7 +161,7 @@ public class EvtJServer {
 		expeditor_executor.interrupt();
 		
 		try {
-			server_socket.close();
+			server_channel.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

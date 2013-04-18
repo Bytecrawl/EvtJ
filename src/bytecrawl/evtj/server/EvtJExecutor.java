@@ -15,7 +15,7 @@ public class EvtJExecutor extends Thread implements Runnable {
 
 	private void s100ms() {
 		try {
-			Thread.sleep(100);
+			Thread.sleep(5);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -34,6 +34,7 @@ public class EvtJExecutor extends Thread implements Runnable {
 					handler.onResume();
 				}
 				handler.onRun();
+				s100ms();
 			}
 			handler.onStop();
 		}
