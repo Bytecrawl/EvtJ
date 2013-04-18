@@ -7,8 +7,8 @@ public class Main {
 	
 	private static int PORT = 4444;
 	
-	public static void main(String[] args)
-	{
+	public static void main(String[] args) throws InterruptedException
+	{	
 		EvtJServer server = new EvtJServer(PORT);
 		server.start();
 		
@@ -24,7 +24,17 @@ public class Main {
 			e.printStackTrace();
 		}
 		
-		se1.send("HOLA");
+		se1.send("slow");
+		se2.send("fast");
+
+		
+		String re = "";
+		System.out.println("Start receiving");
+		re = se2.recv();
+		System.out.println("Client: "+re);
+		re = se1.recv();
+		System.out.println("Client: "+re);
+		
 		se1.close();
 		se2.close();
 
@@ -34,5 +44,6 @@ public class Main {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}}
+		
 	}
 }

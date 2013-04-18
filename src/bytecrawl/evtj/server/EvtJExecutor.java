@@ -13,6 +13,8 @@ public class EvtJExecutor extends Thread implements Runnable {
 		this.handler = handler;
 	}
 
+	public Handler getHandler() { return handler; }
+
 	private void s100ms() {
 		try {
 			Thread.sleep(5);
