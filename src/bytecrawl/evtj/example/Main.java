@@ -24,16 +24,28 @@ public class Main {
 			e.printStackTrace();
 		}
 		
-		se1.send("slow");
-		se2.send("fast");
-
-		
 		String re = "";
-		System.out.println("Start receiving");
+		
+		se1.send("slow");
+		
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		se1.send("fast");
+		se2.send("fast");
+		
+
 		re = se2.recv();
-		System.out.println("Client: "+re);
+		System.out.println("[Client] : "+re);
 		re = se1.recv();
-		System.out.println("Client: "+re);
+		System.out.println("[Client] : "+re);
+		
+		re = se1.recv();
+		System.out.println("[Client] : "+re);
 		
 		se1.close();
 		se2.close();

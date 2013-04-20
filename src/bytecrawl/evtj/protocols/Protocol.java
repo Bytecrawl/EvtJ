@@ -21,8 +21,7 @@ public class Protocol implements Runnable {
 	{
 		try {
 			CharsetEncoder enc = Charset.forName("US-ASCII").newEncoder();  
-			
-			System.out.println("Received: '"+cmd+"'");
+
 			if (cmd.startsWith("fast")) {
 				response = "fast\n";
 				channel.write(enc.encode(CharBuffer.wrap(response)));
@@ -38,7 +37,11 @@ public class Protocol implements Runnable {
 				
 			}
 		}catch(IOException e) {
-			System.out.println("LA LIAMOS");
+			try {
+				channel.close();
+			}catch(IOException e2) {
+				e.printStackTrace();
+			}
 		}
 	}
 }
