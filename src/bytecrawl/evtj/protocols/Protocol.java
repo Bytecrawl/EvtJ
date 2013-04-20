@@ -20,7 +20,7 @@ public class Protocol implements Runnable {
 	public void run()
 	{
 		try {
-			CharsetEncoder enc = Charset.forName("US-ASCII").newEncoder();  
+			CharsetEncoder enc = Charset.forName("UTF-8").newEncoder();  
 
 			if (cmd.startsWith("fast")) {
 				response = "fast\n";

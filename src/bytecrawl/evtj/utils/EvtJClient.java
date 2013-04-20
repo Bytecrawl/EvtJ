@@ -1,4 +1,4 @@
-package bytecrawl.evtj;
+package bytecrawl.evtj.utils;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -7,17 +7,20 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Stack;
 
-public class SocketEngine {
+public class EvtJClient implements Runnable {
+
+	private Thread client_thread;
 	
 	private Socket sck;
-
 	private BufferedWriter bw;
 	private BufferedReader br;
+	private String name;
 	
-	private String input;
-	
-	public SocketEngine(String addr, int port)
+	public EvtJClient(String name, String addr, int port)
 	{
 		try
 		{
@@ -32,10 +35,14 @@ public class SocketEngine {
 			System.out.println(e.getMessage());
 		}catch(IOException e){
 			System.out.println(e.getMessage());
+		}finally{
+			this.name = name;
+			client_thread = new Thread(this);
+			client_thread.start();
 		}
 	}
 	
-	public SocketEngine(Socket sck)
+	public EvtJClient(Socket sck)
 	{
 		try
 		{
@@ -53,41 +60,37 @@ public class SocketEngine {
 		}
 	}
 	
-	public boolean send(String content)
+	public synchronized void start()
 	{
-		if(isClosed())
-			return false;
-		if(!isBound())
-			return false;
-		if(!isConnected())
-			return false;
+		this.notifyAll();
+	}
+	
+	private boolean send(String content)
+	{
 		try
 		{
 			bw.write(content+"\n");
 			bw.flush();
+			System.out.println("[ "+name+" ] Sent:"+content);
 			return true;
 		}catch(IOException e){
 			System.out.println(e.getMessage());
 			return false;
 		}
+
 	}
 	
-	public String recv()
+	private String read()
 	{
-		if(isClosed())
-			return "";
-		if(!isBound())
-			return "";
-		if(!isConnected())
-			return "";
-		
-		input = "";
+		String input = "";
 		try
 		{
 			input = br.readLine();
+			System.out.println("[ "+name+" ] Received:"+input);
 		}catch(IOException e){
 			System.out.println(e.getMessage());
 		}
+				
 		return input;
 	}
 
@@ -99,23 +102,25 @@ public class SocketEngine {
 			bw.close();
 			br.close();
 			sck.close();
+			client_thread.interrupt();
 		}catch(IOException e){
 			e.printStackTrace();
 		}
 	}
-	
-	public boolean isBound()
-	{
-		return sck.isBound();
-	}
-	
-	public boolean isClosed()
-	{
-		return sck.isClosed();
-	}
 
-	public boolean isConnected()
-	{
-		return sck.isConnected();
+	@Override
+	public synchronized void run() {
+		try
+		{
+			this.wait();
+		}catch(InterruptedException e) {
+				
+		}
+		
+		send("fast");
+		read();
+		
+		close();
+			
 	}
 }
