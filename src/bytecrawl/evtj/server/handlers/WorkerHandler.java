@@ -14,7 +14,7 @@ public class WorkerHandler implements Handler {
 	
 	public WorkerHandler(EvtJServer server)
 	{
-		worker_pool = Executors.newFixedThreadPool(5);
+		worker_pool = Executors.newFixedThreadPool(server.getWorkerPoolSize());
 	}
 	
 	public synchronized void pushTask(Runnable r)
@@ -29,19 +29,16 @@ public class WorkerHandler implements Handler {
 
 	@Override
 	public void onPause() {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onResume() {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onStop() {
-		// TODO Auto-generated method stub
 		worker_pool.shutdown();
 	}
 

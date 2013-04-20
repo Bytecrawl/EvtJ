@@ -15,9 +15,9 @@ public class EvtJExecutor extends Thread implements Runnable {
 
 	public Handler getHandler() { return handler; }
 
-	private void s100ms() {
+	private void sleep() {
 		try {
-			Thread.sleep(5);
+			Thread.sleep(0, 500);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -27,16 +27,16 @@ public class EvtJExecutor extends Thread implements Runnable {
 	public void run()
 	{
 		while(!Thread.currentThread().isInterrupted()) {
-			while(server.isInitialising()) { s100ms(); }
+			while(server.isInitialising()) { sleep(); }
 			while(server.isActive())
 			{
 				if(server.isPaused()) {
 					handler.onPause();
-					while(server.isPaused()) { s100ms(); }
+					while(server.isPaused()) { sleep(); }
 					handler.onResume();
 				}
 				handler.onRun();
-				s100ms();
+				sleep();
 			}
 			handler.onStop();
 		}

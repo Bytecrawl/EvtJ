@@ -33,7 +33,7 @@ public class DispatcherHandler implements Handler {
 			client_channel = ((ServerSocketChannel) key.channel()).accept();
 			client_channel.configureBlocking(false);
 			client_channel.register(selector, SelectionKey.OP_READ);
-			System.out.println("Connection accepted from "+client_channel.getLocalAddress().toString());
+			server.newAcceptedClient(client_channel);
 		}catch(IOException e) {
 			System.out.println("Error accepting connection");
 			e.printStackTrace();
@@ -57,7 +57,7 @@ public class DispatcherHandler implements Handler {
     			throw new IOException("Disconnected");
     		}
 	    } catch (IOException e) {
-	        System.out.println("Disconnection from "+client_channel.getLocalAddress().toString());
+	    	server.newDisconnectedClient(client_channel);
 	        key.cancel();
 	        client_channel.close();
 	        return;

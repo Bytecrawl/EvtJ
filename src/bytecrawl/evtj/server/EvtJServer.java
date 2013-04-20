@@ -14,6 +14,8 @@ import bytecrawl.evtj.server.handlers.WorkerHandler;
 
 public class EvtJServer {
 	
+	final private int worker_pool_size = 5;
+	
 	private boolean active;
 	private boolean	paused;
 	private boolean	initialising;
@@ -42,16 +44,24 @@ public class EvtJServer {
 		}
 	}
 	
-	public synchronized boolean isActive() { return active; }
-	public synchronized boolean isPaused() { return paused; }
-	public synchronized boolean isInitialising() { return initialising; }
+	public synchronized void newAcceptedClient(SocketChannel ch) {
+		connected_clients++;
+		try {
+			System.out.println("Connection accepted from "+ch.getLocalAddress().toString()+" [ "+connected_clients+" online clients ]");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	
-	public synchronized int getConnectedClients() { return connected_clients; }
-	public synchronized Selector getSelector() { return selector; }
-
-	public synchronized void pause() { paused = true; }
-	public synchronized void resume() { paused = false; }
-
+	public synchronized void newDisconnectedClient(SocketChannel ch) { 
+		connected_clients--;
+		try {
+			System.out.println("Disconnection from "+ch.getLocalAddress().toString());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void queueRequest(SocketChannel channel, String cmd)
 	{
 		WorkerHandler handler = (WorkerHandler)worker_executor.getHandler();
@@ -91,6 +101,7 @@ public class EvtJServer {
 		active = false;
 
 		dispatcher_executor.interrupt();
+		worker_executor.interrupt();
 		
 		try {
 			server_channel.close();
@@ -99,8 +110,21 @@ public class EvtJServer {
 		}
 		
 		while(dispatcher_executor.isAlive()) {}
+		while(worker_executor.isAlive()) {}
 		
 		System.out.println("Server stopped\n");
 	}
+	
+	public synchronized boolean isActive() { return active; }
+	public synchronized boolean isPaused() { return paused; }
+	public synchronized boolean isInitialising() { return initialising; }
+	
+	public synchronized int getConnectedClients() { return connected_clients; }
+	public synchronized Selector getSelector() { return selector; }
+
+	public synchronized void pause() { paused = true; }
+	public synchronized void resume() { paused = false; }
+
+	public int getWorkerPoolSize() { return worker_pool_size; }
 	
 }

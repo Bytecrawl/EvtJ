@@ -11,8 +11,6 @@ public class Main {
 	{	
 		EvtJServer server = new EvtJServer(PORT);
 		server.start();
-		
-
 
 		SocketEngine se1 = new SocketEngine("127.0.0.1", PORT);
 		SocketEngine se2 = new SocketEngine("127.0.0.1", PORT);
@@ -43,7 +41,6 @@ public class Main {
 		System.out.println("[Client] : "+re);
 		re = se1.recv();
 		System.out.println("[Client] : "+re);
-		
 		re = se1.recv();
 		System.out.println("[Client] : "+re);
 		
