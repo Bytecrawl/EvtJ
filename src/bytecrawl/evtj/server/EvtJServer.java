@@ -7,7 +7,7 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 
-import bytecrawl.evtj.protocols.Protocol;
+import bytecrawl.evtj.protocols.EvtJProtocol;
 import bytecrawl.evtj.server.handlers.DispatcherHandler;
 import bytecrawl.evtj.server.handlers.WorkerHandler;
 
@@ -65,7 +65,7 @@ public class EvtJServer {
 	public void queueRequest(SocketChannel channel, String cmd)
 	{
 		WorkerHandler handler = (WorkerHandler)worker_executor.getHandler();
-		Protocol prot = new Protocol(channel, cmd);
+		EvtJProtocol prot = new EvtJProtocol(channel, cmd);
 		handler.pushTask(prot);
 	}
 

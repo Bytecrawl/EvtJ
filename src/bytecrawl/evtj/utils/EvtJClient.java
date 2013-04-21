@@ -7,9 +7,12 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Stack;
+
+import bytecrawl.evtj.protocols.evtj.Pulse;
+import bytecrawl.evtj.protocols.evtj.Response;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class EvtJClient implements Runnable {
 
@@ -19,6 +22,7 @@ public class EvtJClient implements Runnable {
 	private BufferedWriter bw;
 	private BufferedReader br;
 	private String name;
+	private Gson gson = new GsonBuilder().setPrettyPrinting().create();
 	
 	public EvtJClient(String name, String addr, int port)
 	{
@@ -71,7 +75,7 @@ public class EvtJClient implements Runnable {
 		{
 			bw.write(content+"\n");
 			bw.flush();
-			System.out.println("[ "+name+" ] Sent:"+content);
+			System.out.println("[ "+name+" ] Sent: 	---\n"+content);
 			return true;
 		}catch(IOException e){
 			System.out.println(e.getMessage());
@@ -85,8 +89,10 @@ public class EvtJClient implements Runnable {
 		String input = "";
 		try
 		{
-			input = br.readLine();
-			System.out.println("[ "+name+" ] Received:"+input);
+			char[] buffer = new char[1024];
+			br.read(buffer, 0, 1024);
+			input = new String(buffer);
+			System.out.println("[ "+name+" ] Received:	---\n"+input);
 		}catch(IOException e){
 			System.out.println(e.getMessage());
 		}
@@ -117,7 +123,15 @@ public class EvtJClient implements Runnable {
 				
 		}
 		
-		send("fast");
+		Response message = new Response(
+				sck.getLocalAddress().toString(),
+				sck.getRemoteSocketAddress().toString(),
+				Response.BEAT_TYPE);
+		
+		message.addPayload(new Pulse());
+		
+		send(gson.toJson(message));
+		
 		read();
 		
 		close();
