@@ -8,6 +8,8 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 
+import org.apache.log4j.Logger;
+
 import bytecrawl.evtj.server.EvtJServer;
 import bytecrawl.evtj.utils.EvtJClient;
 
@@ -21,6 +23,7 @@ public class DispatcherHandler implements Handler {
 	private SelectionKey selected_key;
 	private ByteBuffer buffer = ByteBuffer.allocate(1024);
 	private String request;
+	private Logger logger = Logger.getLogger("app");
 			
 	public DispatcherHandler(EvtJServer server) {
 		this.server = server;
@@ -64,7 +67,7 @@ public class DispatcherHandler implements Handler {
 						int n = server.getServedRequests();
 						n++;
 						server.setServedRequests(n);
-						System.out.println("Accepted request from "+client.getChannel().getLocalAddress().toString());
+						logger.debug("Accepted request from "+client.getChannel().getLocalAddress().toString());
 					}
 				}
 			}else{
@@ -108,7 +111,7 @@ public class DispatcherHandler implements Handler {
 				}
 			}
 		} catch (IOException e) {
-			System.out.println("Unexpected error on DispatchHandler onRun");
+			logger.error("Unexpected error on DispatchHandler onRun");
 			e.printStackTrace();
 		}
 	}

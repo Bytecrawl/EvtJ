@@ -9,7 +9,6 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 import bytecrawl.evtj.modules.chat.Message;
-import bytecrawl.evtj.modules.chat.Pulse;
 import bytecrawl.evtj.modules.chat.Register;
 import bytecrawl.evtj.modules.chat.Response;
 

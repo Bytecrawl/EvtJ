@@ -2,10 +2,10 @@ package bytecrawl.evtj.modules.chat;
 
 import java.io.IOException;
 import java.nio.CharBuffer;
-import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
-import java.util.Stack;
+
+import org.apache.log4j.Logger;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -22,6 +22,8 @@ public class ChatWorker extends EvtJModuleWorker implements EvtJModuleWorkerI {
 	private Response received_message;
 	
 	private ChatModule module;
+	
+	private Logger logger = Logger.getLogger("app");
 	
 	public ChatWorker(ChatModule module)
 	{

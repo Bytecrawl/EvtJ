@@ -2,7 +2,6 @@ package bytecrawl.evtj.server;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
@@ -11,6 +10,7 @@ import bytecrawl.evtj.server.handlers.DispatcherHandler;
 import bytecrawl.evtj.server.handlers.WorkerHandler;
 import bytecrawl.evtj.utils.EvtJClient;
 
+import org.apache.log4j.Logger;
 
 public class EvtJServer {
 	
@@ -29,6 +29,8 @@ public class EvtJServer {
 	private EvtJExecutor worker_executor;
 	private EvtJModule module;
 	
+	private Logger logger = Logger.getLogger("app");
+
 	public EvtJServer(int port, EvtJModule module)
 	{
 		try
@@ -39,7 +41,7 @@ public class EvtJServer {
 			server_channel.socket().bind(new InetSocketAddress(port));
 			server_channel.register(selector, SelectionKey.OP_ACCEPT);
 		}catch(IOException e){
-			System.out.println("EvtJServer could not bind the port "+port);
+			logger.error("EvtJServer could not bind the port "+port);
 			System.exit(1);
 		}finally{
 			connected_clients = 0;
@@ -50,7 +52,7 @@ public class EvtJServer {
 	public synchronized void newAcceptedClient(EvtJClient client) {
 		connected_clients++;
 		try {
-			System.out.println("Connection accepted from "+client.getChannel().getLocalAddress().toString()+" [ "+connected_clients+" online clients ]");
+			logger.info("Connection accepted from "+client.getChannel().getLocalAddress().toString()+" [ "+connected_clients+" online clients ]");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -59,7 +61,7 @@ public class EvtJServer {
 	public synchronized void newDisconnectedClient(EvtJClient client) { 
 		connected_clients--;
 		try {
-			System.out.println("Disconnection from "+client.getChannel().getLocalAddress().toString());
+			logger.info("Disconnection from "+client.getChannel().getLocalAddress().toString());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -116,7 +118,7 @@ public class EvtJServer {
 		while(dispatcher_executor.isAlive()) {}
 		while(worker_executor.isAlive()) {}
 		
-		System.out.println("Server stopped\n");
+		logger.info("Server stopped\n");
 	}
 	
 	public synchronized boolean isActive() { return active; }
