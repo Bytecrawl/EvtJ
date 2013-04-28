@@ -2,14 +2,14 @@ package bytecrawl.evtj.server;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
-import java.nio.channels.SocketChannel;
 
-import bytecrawl.evtj.protocols.EvtJProtocol;
 import bytecrawl.evtj.server.handlers.DispatcherHandler;
 import bytecrawl.evtj.server.handlers.WorkerHandler;
+import bytecrawl.evtj.utils.EvtJClient;
 
 
 public class EvtJServer {
@@ -20,14 +20,16 @@ public class EvtJServer {
 	private boolean	paused;
 	private boolean	initialising;
 	private int connected_clients;
+	private int served_requests;
 	
 	private ServerSocketChannel server_channel;
     private Selector selector;
 
 	private EvtJExecutor dispatcher_executor;
 	private EvtJExecutor worker_executor;
+	private EvtJModule module;
 	
-	public EvtJServer(int port)
+	public EvtJServer(int port, EvtJModule module)
 	{
 		try
 		{
@@ -41,32 +43,34 @@ public class EvtJServer {
 			System.exit(1);
 		}finally{
 			connected_clients = 0;
+			this.module = module;
 		}
 	}
 	
-	public synchronized void newAcceptedClient(SocketChannel ch) {
+	public synchronized void newAcceptedClient(EvtJClient client) {
 		connected_clients++;
 		try {
-			System.out.println("Connection accepted from "+ch.getLocalAddress().toString()+" [ "+connected_clients+" online clients ]");
+			System.out.println("Connection accepted from "+client.getChannel().getLocalAddress().toString()+" [ "+connected_clients+" online clients ]");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public synchronized void newDisconnectedClient(SocketChannel ch) { 
+	public synchronized void newDisconnectedClient(EvtJClient client) { 
 		connected_clients--;
 		try {
-			System.out.println("Disconnection from "+ch.getLocalAddress().toString());
+			System.out.println("Disconnection from "+client.getChannel().getLocalAddress().toString());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public void queueRequest(SocketChannel channel, String cmd)
+	public void queueRequest(EvtJClient client, String cmd)
 	{
 		WorkerHandler handler = (WorkerHandler)worker_executor.getHandler();
-		EvtJProtocol prot = new EvtJProtocol(channel, cmd);
-		handler.pushTask(prot);
+		EvtJModuleWorkerI worker = module.getWorker();
+		worker.set(client, cmd);
+		handler.pushTask(worker);
 	}
 
 	public void start_dispatcher()
@@ -125,6 +129,10 @@ public class EvtJServer {
 	public synchronized void pause() { paused = true; }
 	public synchronized void resume() { paused = false; }
 
+	public synchronized EvtJModule getModule() { return module; }
 	public int getWorkerPoolSize() { return worker_pool_size; }
+	
+	public void setServedRequests(int r) { served_requests = r; }
+	public int getServedRequests() { return served_requests; }
 	
 }

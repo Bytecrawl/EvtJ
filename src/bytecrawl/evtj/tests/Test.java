@@ -1,7 +1,4 @@
 package bytecrawl.evtj.tests;
-import static org.junit.Assert.*;
-import bytecrawl.evtj.server.EvtJServer;
-
 
 public class Test {
 	

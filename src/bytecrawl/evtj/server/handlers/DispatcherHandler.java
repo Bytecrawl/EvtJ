@@ -9,6 +9,7 @@ import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 
 import bytecrawl.evtj.server.EvtJServer;
+import bytecrawl.evtj.utils.EvtJClient;
 
 
 public class DispatcherHandler implements Handler {
@@ -16,50 +17,63 @@ public class DispatcherHandler implements Handler {
 	private EvtJServer server;
 	private Selector selector;
 	private Iterator<SelectionKey> selector_iterator;
-	private SocketChannel client_channel;
+	private EvtJClient client;
 	private SelectionKey selected_key;
 	private ByteBuffer buffer = ByteBuffer.allocate(1024);
 	private String request;
 			
 	public DispatcherHandler(EvtJServer server) {
 		this.server = server;
+		
 		selector = server.getSelector();
 	}
 	
-	private void accept(SelectionKey key)
+	private void accept(SelectionKey key) throws IOException
 	{
-		try
-		{
-			client_channel = ((ServerSocketChannel) key.channel()).accept();
-			client_channel.configureBlocking(false);
-			client_channel.register(selector, SelectionKey.OP_READ);
-			server.newAcceptedClient(client_channel);
-		}catch(IOException e) {
-			System.out.println("Error accepting connection");
-			e.printStackTrace();
-		}
+		client = new EvtJClient(((ServerSocketChannel) key.channel()).accept());
+		client.getChannel().configureBlocking(false);
+		client.getChannel().register(selector, SelectionKey.OP_READ);
+		server.newAcceptedClient(client);
 	}
 	
 	private void read(SelectionKey key) throws IOException
 	{
-		client_channel = (SocketChannel) key.channel();
-		buffer.clear();
-
 		try {
-			client_channel = (SocketChannel) key.channel();
+			client = new EvtJClient((SocketChannel) key.channel());
 			buffer.clear();
-			if (client_channel.read(buffer) != -1) {
-				buffer.flip();
-				request = new String(buffer.array(), buffer.position(), buffer.remaining());
-    			server.queueRequest(client_channel, request);
-    			System.out.println("Accepted request from "+client_channel.getLocalAddress().toString());
-    		}else{
-    			throw new IOException("Disconnected");
-    		}
+			
+			int read_bytes = client.getChannel().read(buffer);
+			buffer.flip();
+			if(read_bytes != -1)
+			{
+				if(read_bytes!=0)
+				{
+					request = new String(buffer.array(), buffer.position(), buffer.remaining());
+					while(read_bytes != 0)
+					{
+						buffer.clear();
+						read_bytes = client.getChannel().read(buffer);
+						buffer.flip();
+						String partial = new String(buffer.array(), buffer.position(), buffer.remaining());
+						request +=partial;
+					}
+					String[] request_array = request.split("\n");
+					for(String req : request_array)
+					{
+						server.queueRequest(client, req);
+						int n = server.getServedRequests();
+						n++;
+						server.setServedRequests(n);
+						System.out.println("Accepted request from "+client.getChannel().getLocalAddress().toString());
+					}
+				}
+			}else{
+				throw new IOException();
+			}
 	    } catch (IOException e) {
-	    	server.newDisconnectedClient(client_channel);
+	    	server.newDisconnectedClient(client);
 	        key.cancel();
-	        client_channel.close();
+	        client.getChannel().close();
 	        return;
 	    }
 	}
