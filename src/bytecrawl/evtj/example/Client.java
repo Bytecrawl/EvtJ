@@ -9,6 +9,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 import bytecrawl.evtj.modules.chat.Message;
+import bytecrawl.evtj.modules.chat.Pulse;
 import bytecrawl.evtj.modules.chat.Register;
 import bytecrawl.evtj.modules.chat.Response;
 
@@ -78,7 +79,7 @@ public class Client implements Runnable {
 		{
 			bw.write(content+"\n");
 			bw.flush();
-			//System.out.println("[ "+name+" ] Sent: 	---\n"+content);
+			System.out.println("[ "+name+" ] Sent: "+content);
 			return true;
 		}catch(IOException e){
 			System.out.println(e.getMessage());
@@ -95,7 +96,7 @@ public class Client implements Runnable {
 			char[] buffer = new char[1024];
 			br.read(buffer, 0, 1024);
 			input = new String(buffer);
-			//System.out.println("[ "+name+" ] Received:	---\n"+input);
+			System.out.println("[ "+name+" ] Received: "+input);
 		}catch(IOException e){
 			System.out.println(e.getMessage());
 		}
@@ -123,18 +124,15 @@ public class Client implements Runnable {
 		{
 			this.wait();
 		}catch(InterruptedException e) {
-				
+			
 		}
 		
-		
-		/*
 		Pulse pulse = new Pulse();
 		pulse.setType(Response.BEAT_TYPE);
 		
 		send(gson.toJson(pulse));
 		
 		read();
-		*/
 				
 		Register register = new Register();
 		register.setType(Response.REGISTER_TYPE);
@@ -144,15 +142,24 @@ public class Client implements Runnable {
 		
 		for(int i=0; i<1000; i++)
 		{
-			Message msg = new Message(name, dest, " Ola k ase ! ");
+			Message msg = new Message(name, dest, " Ola k ase ! "+'\n'+" jaja ");
 			msg.setType(Response.MESSAGE_TYPE);
 
 			send(gson.toJson(msg));
-			
+		}
+		
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		for(int i=0; i<3; i++)
+		{
 			read();
 		}
 	
 		close();
-			
 	}
 }

@@ -1,6 +1,6 @@
 package bytecrawl.evtj.server.handlers;
 
-public interface Handler {
+public interface HandlerI {
 
 	public void onPause();
 	

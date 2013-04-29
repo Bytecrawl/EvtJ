@@ -1,19 +1,19 @@
 package bytecrawl.evtj.server;
 
-import bytecrawl.evtj.server.handlers.Handler;
+import bytecrawl.evtj.server.handlers.HandlerI;
 
 public class EvtJExecutor extends Thread implements Runnable {
 	
 	private EvtJServer server;
-	private Handler handler;
+	private HandlerI handler;
 	
-	public EvtJExecutor(EvtJServer server, Handler handler)
+	public EvtJExecutor(EvtJServer server, HandlerI handler)
 	{
 		this.server = server;
 		this.handler = handler;
 	}
 
-	public Handler getHandler() { return handler; }
+	public HandlerI getHandler() { return handler; }
 
 	private void sleep() {
 		try {
@@ -21,6 +21,10 @@ public class EvtJExecutor extends Thread implements Runnable {
 		} catch (InterruptedException e) {
 			this.interrupt();
 		}
+	}
+	
+	public void terminate() {
+		this.interrupt();
 	}
 	
 	public void run()

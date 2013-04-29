@@ -14,7 +14,7 @@ import bytecrawl.evtj.server.EvtJServer;
 import bytecrawl.evtj.utils.EvtJClient;
 
 
-public class DispatcherHandler implements Handler {
+public class DispatcherHandler implements HandlerI {
 	
 	private EvtJServer server;
 	private Selector selector;
@@ -49,27 +49,23 @@ public class DispatcherHandler implements Handler {
 			buffer.flip();
 			if(read_bytes != -1)
 			{
-				if(read_bytes!=0)
+				request = new String(buffer.array(), buffer.position(), buffer.remaining());
+				while(read_bytes > 0)
 				{
-					request = new String(buffer.array(), buffer.position(), buffer.remaining());
-					while(read_bytes != 0)
-					{
-						buffer.clear();
-						read_bytes = client.getChannel().read(buffer);
-						buffer.flip();
-						String partial = new String(buffer.array(), buffer.position(), buffer.remaining());
-						request +=partial;
-					}
-					String[] request_array = request.split("\n");
-					for(String req : request_array)
-					{
-						server.queueRequest(client, req);
-						int n = server.getServedRequests();
-						n++;
-						server.setServedRequests(n);
-						logger.debug("Accepted request from "+client.getChannel().getLocalAddress().toString());
-					}
+					buffer.clear();
+					read_bytes = client.getChannel().read(buffer);
+					if(read_bytes == -1) throw new IOException();
+					buffer.flip();
+					String partial = new String(buffer.array(), buffer.position(), buffer.remaining());
+					request +=partial;
 				}
+				String[] request_array = request.split("\n");
+				for(String req : request_array)
+				{
+					server.newServedRequest();
+					server.queue(client, req);
+					logger.debug("Accepted request from "+client.getIP()+": "+req);
+				}	
 			}else{
 				throw new IOException();
 			}

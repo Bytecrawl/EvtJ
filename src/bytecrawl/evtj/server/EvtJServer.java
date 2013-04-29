@@ -35,13 +35,10 @@ public class EvtJServer {
 	{
 		try
 		{
-			selector = Selector.open();
-			server_channel = ServerSocketChannel.open();
-			server_channel.configureBlocking(false);
-			server_channel.socket().bind(new InetSocketAddress(port));
-			server_channel.register(selector, SelectionKey.OP_ACCEPT);
+			open_selector();
+			initialize_channel(port);
 		}catch(IOException e){
-			logger.error("EvtJServer could not bind the port "+port);
+			logger.error("EvtJServer could not bind the port "+port, e);
 			System.exit(1);
 		}finally{
 			connected_clients = 0;
@@ -49,92 +46,108 @@ public class EvtJServer {
 		}
 	}
 	
+	public synchronized int getConnectedClients() { return connected_clients; }
+	
+	public synchronized EvtJModule getModule() { return module; }
+	
+	public synchronized Selector getSelector() { return selector; }
+	
+	public int getServedRequests() { return served_requests; }
+	
+	public int getWorkerPoolSize() { return worker_pool_size; }
+
+	private void initialize_channel(int port) throws IOException
+	{
+		server_channel = ServerSocketChannel.open();
+		server_channel.configureBlocking(false);
+		server_channel.socket().bind(new InetSocketAddress(port));
+		server_channel.register(selector, SelectionKey.OP_ACCEPT);
+	}
+	
+	public synchronized boolean isActive() { return active; }
+		
+	public synchronized boolean isInitialising() { return initialising; }
+	
+	public synchronized boolean isPaused() { return paused; }
+	
 	public synchronized void newAcceptedClient(EvtJClient client) {
 		connected_clients++;
-		try {
-			logger.info("Connection accepted from "+client.getChannel().getLocalAddress().toString()+" [ "+connected_clients+" online clients ]");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		logger.info("Connection accepted from "+client.getIP()+
+				" [ "+connected_clients+" online clients ]");
 	}
 	
 	public synchronized void newDisconnectedClient(EvtJClient client) { 
 		connected_clients--;
-		try {
-			logger.info("Disconnection from "+client.getChannel().getLocalAddress().toString());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		logger.info("Disconnection from "+client.getIP());
 	}
 	
-	public void queueRequest(EvtJClient client, String cmd)
+	public synchronized void newServedRequest() { served_requests++; }
+	
+	private void open_selector() throws IOException
+	{
+		selector = Selector.open();
+	}
+	
+	public synchronized void pause() { paused = true; }
+
+	/**
+	 * Queue a request to the thread pool of EvtJServer
+	 * by passing a custom module worker for said request.
+	 */
+	public void queue(EvtJClient client, String request)
 	{
 		WorkerHandler handler = (WorkerHandler)worker_executor.getHandler();
 		EvtJModuleWorkerI worker = module.getWorker();
-		worker.set(client, cmd);
+		worker.set(client, request);
 		handler.pushTask(worker);
 	}
+	
+	public synchronized void resume() { paused = false; }
 
-	public void start_dispatcher()
-	{
-		DispatcherHandler handler = new DispatcherHandler(this);
-		dispatcher_executor = new EvtJExecutor(this, handler);
-		dispatcher_executor.start();
-		while(!dispatcher_executor.isAlive()) {}
-	}
-	
-	public void start_worker()
-	{
-		WorkerHandler handler = new WorkerHandler(this);
-		worker_executor = new EvtJExecutor(this, handler);
-		worker_executor.start();
-		while(!worker_executor.isAlive()) {}
-	}
-	
 	public void start()
 	{
 		initialising = true;
-		start_worker();
-		start_dispatcher();
+		start_executors();
 		paused = false;
 		active = true;
 		initialising = false;
 	}
 	
+	private void start_executors()
+	{
+		worker_executor = new EvtJExecutor(this, new WorkerHandler(this));
+		worker_executor.start();
+		
+		dispatcher_executor = new EvtJExecutor(this, new DispatcherHandler(this));
+		dispatcher_executor.start();
+		
+		while(!worker_executor.isAlive()) {}
+		while(!dispatcher_executor.isAlive()) {}
+	}
+
 	public void stop()
 	{
 		paused = false;
 		active = false;
 
-		dispatcher_executor.interrupt();
-		worker_executor.interrupt();
+		stop_executors();
 		
 		try {
 			server_channel.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("Unknown error closing ServerSocketChannel", e);
 		}
-		
-		while(dispatcher_executor.isAlive()) {}
-		while(worker_executor.isAlive()) {}
 		
 		logger.info("Server stopped\n");
 	}
 	
-	public synchronized boolean isActive() { return active; }
-	public synchronized boolean isPaused() { return paused; }
-	public synchronized boolean isInitialising() { return initialising; }
-	
-	public synchronized int getConnectedClients() { return connected_clients; }
-	public synchronized Selector getSelector() { return selector; }
-
-	public synchronized void pause() { paused = true; }
-	public synchronized void resume() { paused = false; }
-
-	public synchronized EvtJModule getModule() { return module; }
-	public int getWorkerPoolSize() { return worker_pool_size; }
-	
-	public void setServedRequests(int r) { served_requests = r; }
-	public int getServedRequests() { return served_requests; }
+	private void stop_executors()
+	{
+		dispatcher_executor.interrupt();
+		worker_executor.interrupt();
+		
+		while(!worker_executor.isAlive()) {}
+		while(!dispatcher_executor.isAlive()) {}
+	}
 	
 }

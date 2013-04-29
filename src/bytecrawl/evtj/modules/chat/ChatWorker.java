@@ -30,17 +30,15 @@ public class ChatWorker extends EvtJModuleWorker implements EvtJModuleWorkerI {
 		this.module = module;
 	}
 	
-	public void handle_beat() throws IOException {
+	private void handle_beat() throws IOException {
 		PulseBack msg = new PulseBack();
 		msg.setType(Response.RBEAT_TYPE);
-		try {
-			client.getChannel().write(encoder.encode(
-					CharBuffer.wrap(gson.toJson(msg))
-					));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
+		if(client.getChannel().isConnected())
+		client.getChannel().write(encoder.encode(
+				CharBuffer.wrap(gson.toJson(msg))
+				));
+
 	}
 	
 	private void handle_rbeat() {
@@ -52,12 +50,14 @@ public class ChatWorker extends EvtJModuleWorker implements EvtJModuleWorkerI {
 		Message msg = gson.fromJson(command, Message.class);
 		EvtJClient recipient = module.getClient(msg.getTo());
 
-		recipient.getChannel().write(encoder.encode(
-			CharBuffer.wrap(gson.toJson(msg))
-		));
+		if(client.getChannel().isConnected())
+			recipient.getChannel().write(encoder.encode(
+				CharBuffer.wrap(gson.toJson(msg))
+			));
+
 	}
-	
-	public void handle_register() {
+
+	private void handle_register() {
 		Register msg = gson.fromJson(command, Register.class);
 		String name = msg.getName();
 		module.registerClient(client, name);
@@ -93,7 +93,7 @@ public class ChatWorker extends EvtJModuleWorker implements EvtJModuleWorkerI {
 				break;
 			}
 			}catch(IOException e){
-				
+				logger.error("Error handling message");
 			}
 	}
 	

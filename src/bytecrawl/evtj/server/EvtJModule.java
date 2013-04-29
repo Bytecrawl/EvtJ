@@ -2,22 +2,26 @@ package bytecrawl.evtj.server;
 
 import bytecrawl.evtj.utils.EvtJClient;
 
-public abstract class EvtJModule {
+public abstract class EvtJModule implements EvtJModuleI {
 
 	private EvtJClient client;
-	private String command;
-	private Class<Runnable> worker_type;
+	private String request;
 	
-	public void setClient(EvtJClient client)
+	@SuppressWarnings("unused")
+	private void setClient(EvtJClient client)
 	{
 		this.client = client;
 	}
 	
-	public void setCommand(String command)
+	@SuppressWarnings("unused")
+	private void setCommand(String request)
 	{
-		this.command = command;
+		this.request = request;
 	}
 	
-	public EvtJModuleWorkerI getWorker() { return null; }
+	@SuppressWarnings("unused")
+	private EvtJClient getClient() { return client; }
+	@SuppressWarnings("unused")
+	private String getRequest() { return request; }
 	
 }
