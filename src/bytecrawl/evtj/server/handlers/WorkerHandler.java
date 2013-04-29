@@ -9,22 +9,11 @@ import bytecrawl.evtj.server.EvtJServer;
 
 public class WorkerHandler implements HandlerI {
 
-	private ExecutorService worker_pool;
 	private Queue<Runnable> queue = new LinkedList<Runnable>();
-	
-	public WorkerHandler(EvtJServer server)
-	{
+	private ExecutorService worker_pool;
+
+	public WorkerHandler(EvtJServer server) {
 		worker_pool = Executors.newFixedThreadPool(server.getWorkerPoolSize());
-	}
-	
-	public synchronized void pushTask(Runnable r)
-	{
-		queue.add(r);
-	}
-	
-	public synchronized Runnable pollTask()
-	{
-		return queue.poll();
 	}
 
 	@Override
@@ -38,19 +27,25 @@ public class WorkerHandler implements HandlerI {
 	}
 
 	@Override
+	public void onRun() {
+		Runnable r;
+		while (queue.size() > 0) {
+			r = pollTask();
+			worker_pool.execute(r);
+		}
+	}
+
+	@Override
 	public void onStop() {
 		worker_pool.shutdown();
 	}
 
-	@Override
-	public void onRun() {
-		Runnable r;
-		while(queue.size()>0)
-		{
-			r = pollTask();
-			worker_pool.execute(r);
-		}
-			
+	public synchronized Runnable pollTask() {
+		return queue.poll();
+	}
+
+	public synchronized void pushTask(Runnable r) {
+		queue.add(r);
 	}
 
 }
