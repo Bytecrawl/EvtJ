@@ -79,7 +79,9 @@ public class DispatcherHandler implements HandlerI {
 			server.newDisconnectedClient(client);
 			selected_key.cancel();
 		} catch (IOException e) {
-			logger.error("Unexpected error accepting or reading a key", e);
+			client.close();
+			server.newDisconnectedClient(client);
+			selected_key.cancel();
 		}
 	}
 

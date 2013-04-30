@@ -13,7 +13,7 @@ public class EvtJClient {
 
 	public EvtJClient(SocketChannel channel) throws IOException {
 		this.channel = channel;
-		this.IP = channel.getLocalAddress().toString();
+		this.IP = channel.socket().getRemoteSocketAddress().toString();
 	}
 
 	public SocketChannel getChannel() {
