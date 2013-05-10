@@ -139,7 +139,8 @@ public class Client implements Runnable {
 		register.setName(name);
 		
 		send(gson.toJson(register));
-		
+		send(gson.toJson(register));
+		/*
 		for(int i=0; i<1000; i++)
 		{
 			Message msg = new Message(name, dest, " Ola k ase ! "+'\n'+" jaja ");
@@ -158,8 +159,8 @@ public class Client implements Runnable {
 		for(int i=0; i<3; i++)
 		{
 			read();
-		}
+		}*/
 	
-		close();
+		//close();
 	}
 }

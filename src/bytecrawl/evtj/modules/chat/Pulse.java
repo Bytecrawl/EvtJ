@@ -6,7 +6,7 @@ public class Pulse extends Response {
 	private String content = "Pulse\n";
 
 	public Pulse() {
-		
+		this.setType(Response.BEAT_TYPE);
 	}
 	
 }

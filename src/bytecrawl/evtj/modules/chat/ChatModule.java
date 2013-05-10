@@ -16,7 +16,6 @@ public class ChatModule extends EvtJModule {
 	public synchronized void registerClient(EvtJClient client, String name)
 	{
 		user_list.put(name, client);
-		logger.info("Registered client: "+name);
 	}
 
 	public synchronized EvtJClient getClient(String name) { return user_list.get(name); }
@@ -24,6 +23,11 @@ public class ChatModule extends EvtJModule {
 	public ChatWorker getWorker()
 	{
 		return new ChatWorker(this);
+	}
+	
+	public synchronized boolean client_exists(String name)
+	{
+		return user_list.containsKey(name);
 	}
 	
 }

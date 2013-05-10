@@ -8,6 +8,7 @@ public class Message extends Response {
 	
 	public Message(String from, String to, String content)
 	{
+		this.setType(Response.MESSAGE_TYPE);
 		this.content = content;
 		this.from = from;
 		this.to = to;

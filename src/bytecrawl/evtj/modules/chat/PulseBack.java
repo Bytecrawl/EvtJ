@@ -6,7 +6,7 @@ public class PulseBack extends Response {
 	private String content = "PulseBack\n";
 	
 	public PulseBack() {
-		
+		this.setType(Response.RBEAT_TYPE);
 	}
 	
 
