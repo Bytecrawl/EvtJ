@@ -29,21 +29,15 @@ public class EvtJServer {
 	private EvtJExecutor worker_executor;
 	private EvtJModule module;
 	
+	private int PORT;
+	
 	private Logger logger = Logger.getLogger("app");
 
 	public EvtJServer(int port, EvtJModule module)
 	{
-		try
-		{
-			open_selector();
-			initialize_channel(port);
-		}catch(IOException e){
-			logger.error("EvtJServer could not bind the port "+port, e);
-			System.exit(1);
-		}finally{
-			connected_clients = 0;
-			this.module = module;
-		}
+		connected_clients = 0;
+		this.PORT = port;
+		this.module = module;
 	}
 	
 	public synchronized int getConnectedClients() { return connected_clients; }
@@ -107,10 +101,20 @@ public class EvtJServer {
 	public void start()
 	{
 		initialising = true;
-		start_executors();
-		paused = false;
-		active = true;
-		initialising = false;
+		try
+		{
+			open_selector();
+			initialize_channel(PORT);
+		}catch(IOException e){
+			logger.error("EvtJServer could not bind the port "+PORT, e);
+			System.exit(1);
+		}finally{
+			start_executors();
+			paused = false;
+			active = true;
+			initialising = false;
+			logger.info("Server started\n");
+		}
 	}
 	
 	private void start_executors()
@@ -127,6 +131,11 @@ public class EvtJServer {
 
 	public void stop()
 	{
+		if(active==false && initialising == false) {
+			logger.warn("Server is not running.");
+			return;
+		}
+
 		paused = false;
 		active = false;
 
@@ -138,7 +147,7 @@ public class EvtJServer {
 			logger.error("Unknown error closing ServerSocketChannel", e);
 		}
 		
-		logger.info("Server stopped\n");
+		logger.info("Server stopped.");
 	}
 	
 	private void stop_executors()
