@@ -91,8 +91,9 @@ public class EvtJServer {
 	public void queue(EvtJClient client, String request)
 	{
 		WorkerHandler handler = (WorkerHandler)worker_executor.getHandler();
-		EvtJModuleWorkerI worker = module.getWorker();
-		worker.set(client, request);
+		EvtJModuleWorker worker = module.getWorker();
+		worker.setEvtJClient(client);
+		worker.setCommand(request);
 		handler.pushTask(worker);
 	}
 	
