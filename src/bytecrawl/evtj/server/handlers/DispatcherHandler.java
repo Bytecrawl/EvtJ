@@ -14,13 +14,12 @@ import org.apache.log4j.Logger;
 import bytecrawl.evtj.server.EvtJServer;
 import bytecrawl.evtj.utils.EvtJClient;
 
-public class DispatcherHandler implements HandlerI {
+public class DispatcherHandler implements Handler {
 
 	private final int BUFFER_SIZE = 1024;
 	private final String SPLIT_SEQUENCE = "\n";
 
 	private ByteBuffer buffer = ByteBuffer.allocate(BUFFER_SIZE);
-	private EvtJClient client;
 	private Logger logger = Logger.getLogger("app");
 	private int read_bytes;
 	private String request;
@@ -42,7 +41,7 @@ public class DispatcherHandler implements HandlerI {
 	 * @throws IOException
 	 */
 	private void accept(SelectionKey key) throws IOException {
-		client = new EvtJClient(((ServerSocketChannel) key.channel()).accept());
+		EvtJClient client = new EvtJClient(((ServerSocketChannel) key.channel()).accept());
 		client.getChannel().configureBlocking(false);
 		client.getChannel().register(selector, SelectionKey.OP_READ);
 		server.newAcceptedClient(client);
@@ -60,13 +59,14 @@ public class DispatcherHandler implements HandlerI {
 
 	@Override
 	public void onRun() {
+		EvtJClient client = null;
 		try {
 			selector.select();
 			selector_iterator = selector.selectedKeys().iterator();
 			while (selector_iterator.hasNext()) {
 				selected_key = selector_iterator.next();
 				selector_iterator.remove();
-
+				client = new EvtJClient((SocketChannel) selected_key.channel());
 				/** Only handle Acceptable and Readable */
 				if (selected_key.isAcceptable()) {
 					accept(selected_key);
@@ -96,9 +96,8 @@ public class DispatcherHandler implements HandlerI {
 
 	private void read(SelectionKey key) throws ClosedChannelException,
 			IOException {
+		EvtJClient client = new EvtJClient((SocketChannel) key.channel());
 		buffer.clear();
-		client = new EvtJClient((SocketChannel) key.channel());
-
 		read_bytes = client.getChannel().read(buffer);
 		buffer.flip();
 

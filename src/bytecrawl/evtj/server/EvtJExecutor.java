@@ -1,11 +1,11 @@
 package bytecrawl.evtj.server;
 
-import bytecrawl.evtj.server.handlers.HandlerI;
+import bytecrawl.evtj.server.handlers.Handler;
 
 public class EvtJExecutor extends Thread implements Runnable {
 
 	private EvtJServer server;
-	private HandlerI handler;
+	private Handler handler;
 
 	/**
 	 * @param server
@@ -14,12 +14,12 @@ public class EvtJExecutor extends Thread implements Runnable {
 	 *            reference to the handler that is going to be run by this
 	 *            executor.
 	 */
-	public EvtJExecutor(EvtJServer server, HandlerI handler) {
+	public EvtJExecutor(EvtJServer server, Handler handler) {
 		this.server = server;
 		this.handler = handler;
 	}
 
-	public HandlerI getHandler() {
+	public Handler getHandler() {
 		return handler;
 	}
 

@@ -82,7 +82,7 @@ public class EvtJServer {
 		selector = Selector.open();
 	}
 	
-	public synchronized void pause() { paused = true; }
+	public synchronized void pause() { pause_module(); paused = true; }
 
 	/**
 	 * Queue a request to the thread pool of EvtJServer
@@ -97,7 +97,7 @@ public class EvtJServer {
 		handler.pushTask(worker);
 	}
 	
-	public synchronized void resume() { paused = false; }
+	public synchronized void resume() { resume_module(); paused = false; }
 
 	public void start()
 	{
@@ -110,6 +110,7 @@ public class EvtJServer {
 			logger.error("EvtJServer could not bind the port "+PORT, e);
 			System.exit(1);
 		}finally{
+			start_module();
 			start_executors();
 			paused = false;
 			active = true;
@@ -120,6 +121,8 @@ public class EvtJServer {
 	
 	private void start_executors()
 	{
+		module.onStart();
+		
 		worker_executor = new EvtJExecutor(this, new WorkerHandler(this));
 		worker_executor.start();
 		
@@ -140,6 +143,7 @@ public class EvtJServer {
 		paused = false;
 		active = false;
 
+		stop_module();
 		stop_executors();
 		
 		try {
@@ -160,4 +164,19 @@ public class EvtJServer {
 		while(!dispatcher_executor.isAlive()) {}
 	}
 	
+	private void start_module() {
+		module.onStart();
+	}
+	
+	private void stop_module() {
+		module.onStop();
+	}
+	
+	private void pause_module() {
+		module.onPause();
+	}
+	
+	private void resume_module() {
+		module.onResume();
+	}
 }
