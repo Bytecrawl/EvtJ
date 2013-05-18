@@ -7,12 +7,12 @@ import java.util.concurrent.Executors;
 
 import bytecrawl.evtj.server.EvtJServer;
 
-public class WorkerHandler implements Handler {
+public class Worker implements Handler {
 
 	private Queue<Runnable> queue = new LinkedList<Runnable>();
 	private ExecutorService worker_pool;
 
-	public WorkerHandler(EvtJServer server) {
+	public Worker(EvtJServer server) {
 		worker_pool = Executors.newFixedThreadPool(server.getWorkerPoolSize());
 	}
 

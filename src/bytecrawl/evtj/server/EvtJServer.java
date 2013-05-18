@@ -6,9 +6,10 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 
-import bytecrawl.evtj.server.handlers.DispatcherHandler;
-import bytecrawl.evtj.server.handlers.WorkerHandler;
+import bytecrawl.evtj.server.handlers.Dispatcher;
+import bytecrawl.evtj.server.handlers.Worker;
 import bytecrawl.evtj.utils.EvtJClient;
+import bytecrawl.evtj.utils.EvtJRequest;
 
 import org.apache.log4j.Logger;
 
@@ -88,12 +89,11 @@ public class EvtJServer {
 	 * Queue a request to the thread pool of EvtJServer
 	 * by passing a custom module worker for said request.
 	 */
-	public void queue(EvtJClient client, String request)
+	public void queue(EvtJRequest request)
 	{
-		WorkerHandler handler = (WorkerHandler)worker_executor.getHandler();
+		Worker handler = (Worker)worker_executor.getHandler();
 		EvtJModuleWorker worker = module.getWorker();
-		worker.setEvtJClient(client);
-		worker.setCommand(request);
+		worker.setEvtJRequest(request);
 		handler.pushTask(worker);
 	}
 	
@@ -123,10 +123,10 @@ public class EvtJServer {
 	{
 		module.onStart();
 		
-		worker_executor = new EvtJExecutor(this, new WorkerHandler(this));
+		worker_executor = new EvtJExecutor(this, new Worker(this));
 		worker_executor.start();
 		
-		dispatcher_executor = new EvtJExecutor(this, new DispatcherHandler(this));
+		dispatcher_executor = new EvtJExecutor(this, new Dispatcher(this));
 		dispatcher_executor.start();
 		
 		while(!worker_executor.isAlive()) {}

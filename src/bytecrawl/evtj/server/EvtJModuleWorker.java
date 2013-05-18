@@ -1,17 +1,15 @@
 package bytecrawl.evtj.server;
 
-import bytecrawl.evtj.utils.EvtJClient;
+import bytecrawl.evtj.utils.EvtJRequest;
 
 public abstract class EvtJModuleWorker implements Runnable {
 
-	protected EvtJClient client;
-	protected String command;
+	private EvtJRequest request;
 	
-	public EvtJModuleWorker()
-	{
-		
+	public EvtJRequest getEvtJRequest() { return request; }
+	
+	public void setEvtJRequest(EvtJRequest request) {
+		this.request = request;
 	}
-	
-	public void setEvtJClient(EvtJClient client) { this.client = client; }
-	public void setCommand(String command) { this.command = command; }
+
 }

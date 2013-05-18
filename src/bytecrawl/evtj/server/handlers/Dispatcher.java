@@ -13,8 +13,9 @@ import org.apache.log4j.Logger;
 
 import bytecrawl.evtj.server.EvtJServer;
 import bytecrawl.evtj.utils.EvtJClient;
+import bytecrawl.evtj.utils.EvtJRequest;
 
-public class DispatcherHandler implements Handler {
+public class Dispatcher implements Handler {
 
 	private final int BUFFER_SIZE = 1024;
 	private final String SPLIT_SEQUENCE = "\n";
@@ -29,7 +30,7 @@ public class DispatcherHandler implements Handler {
 	private Iterator<SelectionKey> selector_iterator;
 	private EvtJServer server;
 
-	public DispatcherHandler(EvtJServer server) {
+	public Dispatcher(EvtJServer server) {
 		this.server = server;
 		this.selector = server.getSelector();
 	}
@@ -100,7 +101,7 @@ public class DispatcherHandler implements Handler {
 		buffer.clear();
 		read_bytes = client.getChannel().read(buffer);
 		buffer.flip();
-
+		
 		if (read_bytes != -1) {
 			request = new String(buffer.array(), buffer.position(),
 					buffer.remaining());
@@ -119,9 +120,11 @@ public class DispatcherHandler implements Handler {
 
 			/** Split in case of multiple requests */
 			request_array = request.split(SPLIT_SEQUENCE);
+			EvtJRequest request;
 			for (String req : request_array) {
+				request = new EvtJRequest(client, req);
 				server.newServedRequest();
-				server.queue(client, req);
+				server.queue(request);
 				logger.debug("Accepted request from " + client.getIP() + ": "
 						+ req);
 			}
@@ -129,5 +132,5 @@ public class DispatcherHandler implements Handler {
 			throw new ClosedChannelException();
 		}
 	}
-
+	
 }
