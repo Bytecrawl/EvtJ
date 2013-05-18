@@ -6,12 +6,14 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import bytecrawl.evtj.server.handlers.Dispatcher;
 import bytecrawl.evtj.server.handlers.Worker;
 import bytecrawl.evtj.utils.EvtJClient;
 import bytecrawl.evtj.utils.EvtJRequest;
 
-import org.apache.log4j.Logger;
 
 public class EvtJServer {
 	
@@ -32,7 +34,7 @@ public class EvtJServer {
 	
 	private int PORT;
 	
-	private Logger logger = Logger.getLogger("app");
+	private Logger logger = LoggerFactory.getLogger("EvtJServer");
 
 	public EvtJServer(int port, EvtJModule module)
 	{
@@ -65,15 +67,15 @@ public class EvtJServer {
 	
 	public synchronized boolean isPaused() { return paused; }
 	
-	public synchronized void newAcceptedClient(EvtJClient client) {
+	public synchronized void newAcceptedConnection(EvtJClient client) {
 		connected_clients++;
 		logger.info("Connection accepted from "+client.getIP()+
 				" [ "+connected_clients+" online clients ]");
 	}
 	
-	public synchronized void newDisconnectedClient(EvtJClient client) { 
+	public synchronized void newDisconnection() { 
 		connected_clients--;
-		logger.info("Disconnection from "+client.getIP());
+		//logger.info("Disconnection from "+client.getIP());
 	}
 	
 	public synchronized void newServedRequest() { served_requests++; }
@@ -115,7 +117,7 @@ public class EvtJServer {
 			paused = false;
 			active = true;
 			initialising = false;
-			logger.info("Server started\n");
+			logger.info("Server started.");
 		}
 	}
 	
@@ -140,10 +142,11 @@ public class EvtJServer {
 			return;
 		}
 
+		stop_module();
+		
 		paused = false;
 		active = false;
 
-		stop_module();
 		stop_executors();
 		
 		try {

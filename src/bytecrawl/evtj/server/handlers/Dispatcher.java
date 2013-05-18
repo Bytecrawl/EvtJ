@@ -9,7 +9,8 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import bytecrawl.evtj.server.EvtJServer;
 import bytecrawl.evtj.utils.EvtJClient;
@@ -21,7 +22,7 @@ public class Dispatcher implements Handler {
 	private final String SPLIT_SEQUENCE = "\n";
 
 	private ByteBuffer buffer = ByteBuffer.allocate(BUFFER_SIZE);
-	private Logger logger = Logger.getLogger("app");
+	private Logger logger = LoggerFactory.getLogger("EvtJServer");
 	private int read_bytes;
 	private String request;
 	private String[] request_array;
@@ -45,7 +46,7 @@ public class Dispatcher implements Handler {
 		EvtJClient client = new EvtJClient(((ServerSocketChannel) key.channel()).accept());
 		client.getChannel().configureBlocking(false);
 		client.getChannel().register(selector, SelectionKey.OP_READ);
-		server.newAcceptedClient(client);
+		server.newAcceptedConnection(client);
 	}
 
 	@Override
@@ -60,14 +61,13 @@ public class Dispatcher implements Handler {
 
 	@Override
 	public void onRun() {
-		EvtJClient client = null;
 		try {
 			selector.select();
 			selector_iterator = selector.selectedKeys().iterator();
 			while (selector_iterator.hasNext()) {
 				selected_key = selector_iterator.next();
 				selector_iterator.remove();
-				client = new EvtJClient((SocketChannel) selected_key.channel());
+				
 				/** Only handle Acceptable and Readable */
 				if (selected_key.isAcceptable()) {
 					accept(selected_key);
@@ -76,12 +76,10 @@ public class Dispatcher implements Handler {
 				}
 			}
 		} catch (ClosedChannelException closed_e) {
-			client.close();
-			server.newDisconnectedClient(client);
+			server.newDisconnection();
 			selected_key.cancel();
 		} catch (IOException e) {
-			client.close();
-			server.newDisconnectedClient(client);
+			server.newDisconnection();
 			selected_key.cancel();
 		}
 	}
@@ -120,9 +118,9 @@ public class Dispatcher implements Handler {
 
 			/** Split in case of multiple requests */
 			request_array = request.split(SPLIT_SEQUENCE);
-			EvtJRequest request;
+			
 			for (String req : request_array) {
-				request = new EvtJRequest(client, req);
+				EvtJRequest request = new EvtJRequest(client, req);
 				server.newServedRequest();
 				server.queue(request);
 				logger.debug("Accepted request from " + client.getIP() + ": "
