@@ -61,9 +61,9 @@
         <antcall target="build"/>
     </target>
 	<target name="test">
-        <junit fork="yes" printsummary="withOutAndErr">
+        <junit fork="yes" printsummary="yes" haltonfailure="no" showoutput="yes">
             <formatter type="xml"/>
-            <test name="bytecrawl.evtj.tests.EvtJServerTests"/>
+            <test name="bytecrawl.evtj.tests.TestSuite"/>
             <classpath refid="EvtJ.classpath"/>
         </junit>
        	<fail message="Test failure detected, check test results." if="test.failed" />
