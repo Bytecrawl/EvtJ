@@ -86,11 +86,12 @@
             <classpath refid="EvtJ.classpath"/>
         </java>
     </target>
-    <target name="test">
+	<target name="test">
         <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr">
+		<fail message="Test failure detected, check test results." if="test.failed" />
+        <junit fork="yes" printsummary="withOutAndErr" haltonfailure="yes" failureproperty="test.failed">
             <formatter type="xml"/>
-            <test name="bytecrawl.evtj.tests.Test" todir="${junit.output.dir}"/>
+            <test name="bytecrawl.evtj.tests.EvtJServerTests" todir="${junit.output.dir}"/>
             <classpath refid="EvtJ.classpath"/>
         </junit>
     </target>
@@ -110,4 +111,5 @@
             <report format="frames" todir="${junit.output.dir}"/>
         </junitreport>
     </target>
+    
 </project>

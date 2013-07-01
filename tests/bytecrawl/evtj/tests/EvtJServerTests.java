@@ -84,7 +84,7 @@ public class EvtJServerTests {
 		EvtJServer server = new EvtJServer(4444, mock_module);
 		assertEquals(server.getConnectedClients(), 0);
 		server.newAcceptedConnection(client);
-		assertEquals("Error in connected clients counter",server.getConnectedClients(), 0);
+		assertEquals(server.getConnectedClients(), 1);
 	}	
 
 }
