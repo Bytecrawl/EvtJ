@@ -1,19 +1,17 @@
 package bytecrawl.evtj.tests;
 
 import static org.junit.Assert.*;
-import junit.framework.JUnit4TestAdapter;
-import junit.framework.Test;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import bytecrawl.evtj.server.EvtJModule;
 import bytecrawl.evtj.server.EvtJServer;
 import bytecrawl.evtj.utils.EvtJClient;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
  
 public class EvtJServerTests {
 	
-	final Logger logger =
+	private static final Logger logger =
 	    LoggerFactory.getLogger(EvtJServerTests.class);
 	
 	private EvtJModule mock_module;

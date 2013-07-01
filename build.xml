@@ -76,40 +76,15 @@
             <classpath refid="EvtJ.classpath"/>
         </junit>
     </target>
-    <target name="Main (1)">
-        <java classname="bytecrawl.evtj.example.Main" failonerror="true" fork="yes">
-            <classpath refid="EvtJ.classpath"/>
-        </java>
-    </target>
-    <target name="Server">
-        <java classname="bytecrawl.evtj.example.Server" failonerror="true" fork="yes">
-            <classpath refid="EvtJ.classpath"/>
-        </java>
-    </target>
 	<target name="test">
         <mkdir dir="${junit.output.dir}"/>
-		<fail message="Test failure detected, check test results." if="test.failed" />
         <junit fork="yes" printsummary="withOutAndErr" haltonfailure="yes" failureproperty="test.failed">
             <formatter type="xml"/>
-            <test name="bytecrawl.evtj.tests.EvtJServerTests" todir="${junit.output.dir}"/>
+            <test name="bytecrawl.evtj.tests.EvtJServerTests"/>
             <classpath refid="EvtJ.classpath"/>
         </junit>
+       	<fail message="Test failure detected, check test results." if="test.failed" />
     </target>
-    <target name="Test.ServerInit">
-        <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr">
-            <formatter type="xml"/>
-            <test name="bytecrawl.evtj.tests.Test" todir="${junit.output.dir}"/>
-            <classpath refid="EvtJ.classpath"/>
-        </junit>
-    </target>
-    <target name="junitreport">
-        <junitreport todir="${junit.output.dir}">
-            <fileset dir="${junit.output.dir}">
-                <include name="TEST-*.xml"/>
-            </fileset>
-            <report format="frames" todir="${junit.output.dir}"/>
-        </junitreport>
-    </target>
+
     
 </project>
