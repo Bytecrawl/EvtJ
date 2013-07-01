@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite errors="0" failures="1" hostname="Alevinval-PC" name="bytecrawl.evtj.tests.EvtJServerTests" tests="8" time="0.065" timestamp="2013-07-01T17:58:04">
+  <properties>
+    <property name="java.vendor" value="Oracle Corporation" />
+    <property name="sun.java.launcher" value="SUN_STANDARD" />
+    <property name="env.WIX" value="C:\Program Files (x86)\Windows Installer XML v3\" />
+    <property name="eclipse.pdebuild.templates" value="/C:/Users/Alevinval/Desktop/eclipse/plugins/org.eclipse.pde.build_3.8.1.v20120725-202643/templates/" />
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers" />
+    <property name="env.PROMPT" value="$P$G" />
+    <property name="ant.file.EvtJ" value="C:\Users\Alevinval\Documents\GitHub\EvtJ\build.xml" />
+    <property name="os.name" value="Windows 7" />
+    <property name="env.FP_NO_HOST_CHECK" value="NO" />
+    <property name="sun.boot.class.path" value="C:\Program Files\Java\jre7\lib\resources.jar;C:\Program Files\Java\jre7\lib\rt.jar;C:\Program Files\Java\jre7\lib\sunrsasign.jar;C:\Program Files\Java\jre7\lib\jsse.jar;C:\Program Files\Java\jre7\lib\jce.jar;C:\Program Files\Java\jre7\lib\charsets.jar;C:\Program Files\Java\jre7\lib\jfr.jar;C:\Program Files\Java\jre7\classes" />
+    <property name="env.COMPUTERNAME" value="ALEVINVAL-PC" />
+    <property name="env.CommonProgramW6432" value="C:\Program Files\Common Files" />
+    <property name="ant.file.type.EvtJ" value="file" />
+    <property name="env.ALLUSERSPROFILE" value="C:\ProgramData" />
+    <property name="env.GTK_BASEPATH" value="C:\Program Files (x86)\GtkSharp\2.12\" />
+    <property name="sun.desktop" value="windows" />
+    <property name="java.vm.specification.vendor" value="Oracle Corporation" />
+    <property name="ant.home" value="C:\Users\Alevinval\Desktop\eclipse\plugins\org.apache.ant_1.8.3.v20120321-1730" />
+    <property name="java.runtime.version" value="1.7.0_07-b11" />
+    <property name="env.HOMEPATH" value="\Users\Alevinval" />
+    <property name="user.name" value="Alevinval" />
+    <property name="user.language" value="es" />
+    <property name="env.PT5HOME" value="C:\Program Files (x86)\Cisco Packet Tracer 5.3.3" />
+    <property name="sun.boot.library.path" value="C:\Program Files\Java\jre7\bin" />
+    <property name="ant.project.default-target" value="build" />
+    <property name="ant.project.name" value="EvtJ" />
+    <property name="java.version" value="1.7.0_07" />
+    <property name="env.PROCESSOR_IDENTIFIER" value="Intel64 Family 6 Model 58 Stepping 9, GenuineIntel" />
+    <property name="user.timezone" value="" />
+    <property name="env.TEMP" value="C:\Users\ALEVIN~1\AppData\Local\Temp" />
+    <property name="sun.arch.data.model" value="64" />
+    <property name="env.SSH_AGENT_PID" value="13588" />
+    <property name="java.endorsed.dirs" value="C:\Program Files\Java\jre7\lib\endorsed" />
+    <property name="env.JDK_HOME" value="C:\Program Files\Java\jdk1.7.0_07" />
+    <property name="sun.cpu.isalist" value="amd64" />
+    <property name="env.HOMEDRIVE" value="C:" />
+    <property name="sun.jnu.encoding" value="Cp1252" />
+    <property name="file.encoding.pkg" value="sun.io" />
+    <property name="env.VS110COMNTOOLS" value="M:\VS2012\Common7\Tools\" />
+    <property name="ECLIPSE_HOME" value="../../../Desktop/eclipse" />
+    <property name="file.separator" value="\" />
+    <property name="java.specification.name" value="Java Platform API Specification" />
+    <property name="java.class.version" value="51.0" />
+    <property name="user.country" value="ES" />
+    <property name="java.home" value="C:\Program Files\Java\jre7" />
+    <property name="env.PSModulePath" value="C:\Windows\system32\WindowsPowerShell\v1.0\Modules\" />
+    <property name="env.APPDATA" value="C:\Users\Alevinval\AppData\Roaming" />
+    <property name="env.PUBLIC" value="C:\Users\Public" />
+    <property name="java.vm.info" value="mixed mode" />
+    <property name="env.ComSpec" value="C:\Windows\system32\cmd.exe" />
+    <property name="env.OS" value="Windows_NT" />
+    <property name="env.CommonProgramFiles" value="C:\Program Files\Common Files" />
+    <property name="ant.file" value="C:\Users\Alevinval\Documents\GitHub\EvtJ\build.xml" />
+    <property name="os.version" value="6.1" />
+    <property name="env.ProgramW6432" value="C:\Program Files" />
+    <property name="env.AMDAPPSDKROOT" value="C:\Program Files (x86)\AMD APP\" />
+    <property name="path.separator" value=";" />
+    <property name="java.vm.version" value="23.3-b01" />
+    <property name="user.variant" value="" />
+    <property name="env.USERPROFILE" value="C:\Users\Alevinval" />
+    <property name="ant.library.dir" value="C:\Users\Alevinval\Desktop\eclipse\plugins\org.apache.ant_1.8.3.v20120321-1730\lib" />
+    <property name="junit.output.dir" value="junit" />
+    <property name="env.JAVA_HOME" value="C:\Program Files\Java\jdk1.7.0_07" />
+    <property name="java.awt.printerjob" value="sun.awt.windows.WPrinterJob" />
+    <property name="env.TMP" value="C:\Users\ALEVIN~1\AppData\Local\Temp" />
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle" />
+    <property name="awt.toolkit" value="sun.awt.windows.WToolkit" />
+    <property name="user.script" value="" />
+    <property name="eclipse.pdebuild.scripts" value="/C:/Users/Alevinval/Desktop/eclipse/plugins/org.eclipse.pde.build_3.8.1.v20120725-202643/scripts/" />
+    <property name="user.home" value="C:\Users\Alevinval" />
+    <property name="target" value="1.6" />
+    <property name="env.ProgramData" value="C:\ProgramData" />
+    <property name="env.SESSIONNAME" value="Console" />
+    <property name="env.ProgramFiles(x86)" value="C:\Program Files (x86)" />
+    <property name="java.specification.vendor" value="Oracle Corporation" />
+    <property name="env.M2_HOME" value="M:\Maven" />
+    <property name="env.NUMBER_OF_PROCESSORS" value="4" />
+    <property name="java.library.path" value="C:\Program Files\Java\jre7\bin;C:\Windows\Sun\Java\bin;C:\Windows\system32;C:\Windows;C:\oraclexe\app\oracle\product\10.2.0\server\bin;C:\Program Files (x86)\ImageMagick-6.8.3-Q16;C:\Program Files (x86)\AMD APP\bin\x86_64;C:\Program Files (x86)\AMD APP\bin\x86;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Python27\Lib\site-packages\PyQt4;C:\Program Files (x86)\Common Files\Microsoft Shared\Windows Live;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\ATI Technologies\ATI.ACE\Core-Static;C:\Program Files\MiKTeX 2.9\miktex\bin\x64\;C:\Python27;C:\Program Files\Microsoft\Web Platform Installer\;C:\Program Files (x86)\nodejs\;C:\Users\Alevinval\AppData\Local\Smartbar\Application\;C:\Users\Alevinval\AppData\Local\Smartbar\Application\;C:\Program Files (x86)\Windows Kits\8.0\Windows Performance Toolkit\;C:\Program Files\Microsoft SQL Server\110\Tools\Binn\;C:\IB\opencv\build\x64\vc9\bin;C:\Program Files (x86)\Git\cmd;C:\Program Files (x86)\GtkSharp\2.12\bin;C:\msys\1.0\bin;C:\mingw\bin;M:\Maven\bin;C:\GNAT\2012\bin;C:\Program Files\Common Files\Microsoft Shared\Windows Live;C:\Users\Alevinval\AppData\Roaming\npm\;." />
+    <property name="java.vendor.url" value="http://java.oracle.com/" />
+    <property name="java.vm.vendor" value="Oracle Corporation" />
+    <property name="java.runtime.name" value="Java(TM) SE Runtime Environment" />
+    <property name="ant.version" value="Apache Ant(TM) version 1.8.3 compiled on February 26 2012" />
+    <property name="java.class.path" value="C:\Users\Alevinval\Documents\GitHub\EvtJ\bin;C:\Users\Alevinval\Desktop\eclipse\plugins\org.junit_4.10.0.v4_10_0_v20120426-0900\junit.jar;C:\Users\Alevinval\Desktop\eclipse\plugins\org.hamcrest.core_1.1.0.v20090501071000.jar;C:\Users\Alevinval\Documents\GitHub\EvtJ\lib\slf4j-api-1.7.5.jar;C:\Users\Alevinval\Desktop\eclipse\plugins\org.apache.ant_1.8.3.v20120321-1730\lib\ant-launcher.jar;C:\Users\Alevinval\Desktop\eclipse\plugins\org.apache.ant_1.8.3.v20120321-1730\lib\ant.jar;C:\Users\Alevinval\Desktop\eclipse\plugins\org.apache.ant_1.8.3.v20120321-1730\lib\ant-junit.jar;C:\Users\Alevinval\Desktop\eclipse\plugins\org.apache.ant_1.8.3.v20120321-1730\lib\ant-junit4.jar" />
+    <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner bytecrawl.evtj.tests.EvtJServerTests filtertrace=true haltOnError=false haltOnFailure=false formatter=org.apache.tools.ant.taskdefs.optional.junit.OutErrSummaryJUnitResultFormatter showoutput=false outputtoformatters=true logfailedtests=true logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,C:\Users\Alevinval\Documents\GitHub\EvtJ\junit\TEST-bytecrawl.evtj.tests.EvtJServerTests.xml crashfile=C:\Users\Alevinval\Documents\GitHub\EvtJ\junitvmwatcher6940668046175952214.properties propsfile=C:\Users\Alevinval\Documents\GitHub\EvtJ\junit2027464252055234305.properties" />
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification" />
+    <property name="env.LOGONSERVER" value="\\ALEVINVAL-PC" />
+    <property name="env.windir" value="C:\Windows" />
+    <property name="env.PROCESSOR_ARCHITECTURE" value="AMD64" />
+    <property name="java.vm.specification.version" value="1.7" />
+    <property name="sun.cpu.endian" value="little" />
+    <property name="sun.os.patch.level" value="" />
+    <property name="debuglevel" value="source,lines,vars" />
+    <property name="env.ProgramFiles" value="C:\Program Files" />
+    <property name="env.ANT_HOME" value="C:\Users\Alevinval\Desktop\eclipse\plugins\org.apache.ant_1.8.3.v20120321-1730" />
+    <property name="java.io.tmpdir" value="C:\Users\ALEVIN~1\AppData\Local\Temp\" />
+    <property name="env.PROCESSOR_REVISION" value="3a09" />
+    <property name="eclipse.pdebuild.home" value="/C:/Users/Alevinval/Desktop/eclipse/plugins/org.eclipse.pde.build_3.8.1.v20120725-202643/./" />
+    <property name="env.CommonProgramFiles(x86)" value="C:\Program Files (x86)\Common Files" />
+    <property name="env.VBOX_INSTALL_PATH" value="C:\Program Files\Oracle\VirtualBox\" />
+    <property name="java.vendor.url.bug" value="http://bugreport.sun.com/bugreport/" />
+    <property name="env.SSH_AUTH_SOCK" value="/tmp/ssh-NhRIi13788/agent.13788" />
+    <property name="env.SystemRoot" value="C:\Windows" />
+    <property name="java.awt.graphicsenv" value="sun.awt.Win32GraphicsEnvironment" />
+    <property name="os.arch" value="amd64" />
+    <property name="java.ext.dirs" value="C:\Program Files\Java\jre7\lib\ext;C:\Windows\Sun\Java\lib\ext" />
+    <property name="env.LOCALAPPDATA" value="C:\Users\Alevinval\AppData\Local" />
+    <property name="user.dir" value="C:\Users\Alevinval\Documents\GitHub\EvtJ" />
+    <property name="line.separator" value="&#xd;&#xa;" />
+    <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM" />
+    <property name="env.PATHEXT" value=".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC" />
+    <property name="env.Path" value="C:\oraclexe\app\oracle\product\10.2.0\server\bin;C:\Program Files (x86)\ImageMagick-6.8.3-Q16;C:\Program Files (x86)\AMD APP\bin\x86_64;C:\Program Files (x86)\AMD APP\bin\x86;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Python27\Lib\site-packages\PyQt4;C:\Program Files (x86)\Common Files\Microsoft Shared\Windows Live;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\ATI Technologies\ATI.ACE\Core-Static;C:\Program Files\MiKTeX 2.9\miktex\bin\x64\;C:\Python27;C:\Program Files\Microsoft\Web Platform Installer\;C:\Program Files (x86)\nodejs\;C:\Users\Alevinval\AppData\Local\Smartbar\Application\;C:\Users\Alevinval\AppData\Local\Smartbar\Application\;C:\Program Files (x86)\Windows Kits\8.0\Windows Performance Toolkit\;C:\Program Files\Microsoft SQL Server\110\Tools\Binn\;C:\IB\opencv\build\x64\vc9\bin;C:\Program Files (x86)\Git\cmd;C:\Program Files (x86)\GtkSharp\2.12\bin;C:\msys\1.0\bin;C:\mingw\bin;M:\Maven\bin;C:\GNAT\2012\bin;C:\Program Files\Common Files\Microsoft Shared\Windows Live;C:\Users\Alevinval\AppData\Roaming\npm\" />
+    <property name="basedir" value="C:\Users\Alevinval\Documents\GitHub\EvtJ" />
+    <property name="ant.java.version" value="1.7" />
+    <property name="ant.core.lib" value="C:\Users\Alevinval\Desktop\eclipse\plugins\org.apache.ant_1.8.3.v20120321-1730\lib\ant.jar" />
+    <property name="env.M2" value="M:\Maven\bin" />
+    <property name="env.USERNAME" value="Alevinval" />
+    <property name="source" value="1.6" />
+    <property name="env.SystemDrive" value="C:" />
+    <property name="file.encoding" value="Cp1252" />
+    <property name="env.VS100COMNTOOLS" value="C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\Tools\" />
+    <property name="env.USERDOMAIN" value="Alevinval-PC" />
+    <property name="java.specification.version" value="1.7" />
+    <property name="ant.project.invoked-targets" value="EvtJ" />
+    <property name="env.PROCESSOR_LEVEL" value="6" />
+  </properties>
+  <testcase classname="bytecrawl.evtj.tests.EvtJServerTests" name="ServerStop" time="0.002" />
+  <testcase classname="bytecrawl.evtj.tests.EvtJServerTests" name="ServerPause" time="0.014" />
+  <testcase classname="bytecrawl.evtj.tests.EvtJServerTests" name="ServerGetModule" time="0.0" />
+  <testcase classname="bytecrawl.evtj.tests.EvtJServerTests" name="ServerPauseAndResume" time="0.001" />
+  <testcase classname="bytecrawl.evtj.tests.EvtJServerTests" name="ServerInitialisation" time="0.001" />
+  <testcase classname="bytecrawl.evtj.tests.EvtJServerTests" name="ServerGetConnectedClients" time="0.0" />
+  <testcase classname="bytecrawl.evtj.tests.EvtJServerTests" name="ServerIntegrity" time="0.001" />
+  <testcase classname="bytecrawl.evtj.tests.EvtJServerTests" name="ServerAcceptedConnection" time="0.004">
+    <failure message="Error in connected clients counter expected:&lt;1&gt; but was:&lt;0&gt;" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: Error in connected clients counter expected:&lt;1&gt; but was:&lt;0&gt;
+	at bytecrawl.evtj.tests.EvtJServerTests.ServerAcceptedConnection(EvtJServerTests.java:87)
+</failure>
+  </testcase>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+]]></system-err>
+</testsuite>

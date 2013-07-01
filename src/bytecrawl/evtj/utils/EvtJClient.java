@@ -12,6 +12,7 @@ public class EvtJClient {
 	private String IP;
 	private Logger logger = LoggerFactory.getLogger("EvtJServer");
 
+	public EvtJClient() {};
 	public EvtJClient(SocketChannel channel) throws IOException {
 		this.channel = channel;
 		this.IP = channel.socket().getRemoteSocketAddress().toString();
