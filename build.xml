@@ -60,24 +60,7 @@
         <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
         <antcall target="build"/>
     </target>
-    <target name="EvtJ">
-        <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr">
-            <formatter type="xml"/>
-            <test name="bytecrawl.evtj.tests.EvtJServerTests" todir="${junit.output.dir}"/>
-            <classpath refid="EvtJ.classpath"/>
-        </junit>
-    </target>
-    <target name="EvtJServerTests">
-        <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr">
-            <formatter type="xml"/>
-            <test name="bytecrawl.evtj.tests.EvtJServerTests" todir="${junit.output.dir}"/>
-            <classpath refid="EvtJ.classpath"/>
-        </junit>
-    </target>
 	<target name="test">
-        <mkdir dir="${junit.output.dir}"/>
         <junit fork="yes" printsummary="withOutAndErr" haltonfailure="yes" failureproperty="test.failed">
             <formatter type="xml"/>
             <test name="bytecrawl.evtj.tests.EvtJServerTests"/>
@@ -85,6 +68,4 @@
         </junit>
        	<fail message="Test failure detected, check test results." if="test.failed" />
     </target>
-
-    
 </project>
