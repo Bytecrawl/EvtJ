@@ -86,7 +86,7 @@
             <classpath refid="EvtJ.classpath"/>
         </java>
     </target>
-    <target name="Test">
+    <target name="test">
         <mkdir dir="${junit.output.dir}"/>
         <junit fork="yes" printsummary="withOutAndErr">
             <formatter type="xml"/>
