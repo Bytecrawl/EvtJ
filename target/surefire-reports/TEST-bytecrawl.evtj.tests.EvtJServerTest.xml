@@ -26,7 +26,7 @@
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="user.variant" value=""/>
     <property name="os.name" value="Windows 7"/>
-    <property name="classworlds.conf" value="C:\Users\Alevinval\Desktop\GitHub\.metadata\.plugins\org.eclipse.m2e.core\launches\m2conf3899500798002473294.tmp"/>
+    <property name="classworlds.conf" value="C:\Users\Alevinval\Desktop\GitHub\.metadata\.plugins\org.eclipse.m2e.core\launches\m2conf5129985670958253572.tmp"/>
     <property name="sun.jnu.encoding" value="Cp1252"/>
     <property name="java.library.path" value="C:\Program Files\Java\jre7\bin;C:\Windows\Sun\Java\bin;C:\Windows\system32;C:\Windows;C:\oraclexe\app\oracle\product\10.2.0\server\bin;C:\Program Files (x86)\ImageMagick-6.8.3-Q16;C:\Program Files (x86)\AMD APP\bin\x86_64;C:\Program Files (x86)\AMD APP\bin\x86;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Python27\Lib\site-packages\PyQt4;C:\Program Files (x86)\Common Files\Microsoft Shared\Windows Live;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\ATI Technologies\ATI.ACE\Core-Static;C:\Program Files\MiKTeX 2.9\miktex\bin\x64\;C:\Python27;C:\Program Files\Microsoft\Web Platform Installer\;C:\Program Files (x86)\nodejs\;C:\Users\Alevinval\AppData\Local\Smartbar\Application\;C:\Users\Alevinval\AppData\Local\Smartbar\Application\;C:\Program Files (x86)\Windows Kits\8.0\Windows Performance Toolkit\;C:\Program Files\Microsoft SQL Server\110\Tools\Binn\;C:\IB\opencv\build\x64\vc9\bin;C:\Program Files (x86)\Git\cmd;C:\Program Files (x86)\GtkSharp\2.12\bin;C:\msys\1.0\bin;C:\mingw\bin;M:\Maven\bin;C:\GNAT\2012\bin;C:\Program Files\Common Files\Microsoft Shared\Windows Live;C:\Users\Alevinval\AppData\Roaming\npm\;."/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
@@ -60,10 +60,10 @@
     <property name="sun.desktop" value="windows"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
-  <testcase time="0.019" classname="bytecrawl.evtj.tests.EvtJServerTest" name="ServerInitialisation"/>
+  <testcase time="0.018" classname="bytecrawl.evtj.tests.EvtJServerTest" name="ServerInitialisation"/>
   <testcase time="0.001" classname="bytecrawl.evtj.tests.EvtJServerTest" name="ServerPauseAndResume"/>
   <testcase time="0.001" classname="bytecrawl.evtj.tests.EvtJServerTest" name="ServerGetModule"/>
-  <testcase time="0.002" classname="bytecrawl.evtj.tests.EvtJServerTest" name="ServerGetConnectedClients"/>
+  <testcase time="0.001" classname="bytecrawl.evtj.tests.EvtJServerTest" name="ServerGetConnectedClients"/>
   <testcase time="0.002" classname="bytecrawl.evtj.tests.EvtJServerTest" name="ServerIntegrity"/>
   <testcase time="0.001" classname="bytecrawl.evtj.tests.EvtJServerTest" name="ServerAcceptedConnection"/>
   <testcase time="0.001" classname="bytecrawl.evtj.tests.EvtJServerTest" name="ServerStop"/>
