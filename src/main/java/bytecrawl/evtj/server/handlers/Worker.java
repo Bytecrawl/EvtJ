@@ -16,17 +16,14 @@ public class Worker implements Handler {
 		worker_pool = Executors.newFixedThreadPool(server.getWorkerPoolSize());
 	}
 
-	@Override
 	public void onPause() {
 
 	}
 
-	@Override
 	public void onResume() {
 
 	}
 
-	@Override
 	public void onRun() {
 		Runnable r;
 		while (queue.size() > 0) {
@@ -35,7 +32,6 @@ public class Worker implements Handler {
 		}
 	}
 
-	@Override
 	public void onStop() {
 		worker_pool.shutdown();
 	}

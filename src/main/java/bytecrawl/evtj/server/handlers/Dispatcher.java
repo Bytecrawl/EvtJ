@@ -49,17 +49,14 @@ public class Dispatcher implements Handler {
 		server.newAcceptedConnection(client);
 	}
 
-	@Override
 	public void onPause() {
 
 	}
 
-	@Override
 	public void onResume() {
 
 	}
 
-	@Override
 	public void onRun() {
 		try {
 			selector.select();
@@ -84,7 +81,6 @@ public class Dispatcher implements Handler {
 		}
 	}
 
-	@Override
 	public void onStop() {
 		try {
 			selector.close();

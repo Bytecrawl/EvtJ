@@ -9,15 +9,15 @@ import bytecrawl.evtj.server.EvtJModule;
 import bytecrawl.evtj.server.EvtJServer;
 import bytecrawl.evtj.utils.EvtJClient;
  
-public class EvtJServerTests {
+public class EvtJServerTest {
 	
 	private static final Logger logger =
-	    LoggerFactory.getLogger(EvtJServerTests.class);
+	    LoggerFactory.getLogger(EvtJServerTest.class);
 	
 	private EvtJModule mock_module;
 	private EvtJClient client;
 
-	public EvtJServerTests() {
+	public EvtJServerTest() {
 		mock_module = new MockModule();
 		client = new EvtJClient();
 	}
