@@ -1,4 +1,4 @@
-package bytecrawl.evtj.tests;
+package bytecrawl.evtj.tests.utils;
 
 import bytecrawl.evtj.server.EvtJModule;
 import bytecrawl.evtj.server.EvtJModuleWorker;
