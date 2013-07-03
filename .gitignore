@@ -2,6 +2,8 @@
 ## Eclipse
 #################
 target/
+*.iml
+.idea/
 
 *.pydevproject
 .project
