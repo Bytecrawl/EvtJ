@@ -23,6 +23,7 @@ public class EvtJModuleTest {
     public EvtJModuleTest() {
         mock_module = new CustomMockModule();
         client = new EvtJClient();
+        server = new EvtJServer(4444, mock_module);
     }
 
     public CustomMockModule getMockModule(EvtJServer server) {
@@ -30,7 +31,7 @@ public class EvtJModuleTest {
     }
 
     @Before
-    public final void setUp() { server = new EvtJServer(4444, mock_module); }
+    public final void setUp() { server.start(); }
 
     @After
     public final void tearDown() { server.stop(); server = null; }

@@ -24,44 +24,37 @@ public class EvtJServerTest {
 	public EvtJServerTest() {
 		mock_module = new MockModule();
 		client = new EvtJClient();
+        server = new EvtJServer(4444, mock_module);
 	}
-
     @Before
-    public final void setUp() { server = new EvtJServer(4444, mock_module); }
+    public final void setUp() { server = new EvtJServer(4444, mock_module); server.start(); }
 
     @After
     public final void tearDown() { server.stop(); server = null; }
 
     @org.junit.Test
 	public void ServerInitialisation() {
-		server.start();
 		assertEquals(server.isActive(), true);
-		server.stop();
 	}
 	
 	@org.junit.Test
 	public void ServerPause() {
-		server.start();
 		server.pause();
 		assertEquals(server.isPaused(), true);
-		server.stop();
 	}
 	
 	@org.junit.Test
 	public void ServerStop() {
-        server.start();
-		server.stop();
+        server.stop();
 		assertEquals(server.isActive(), false);
 	}
 	
 	@org.junit.Test
 	public void ServerPauseAndResume() {
-		server.start();
 		server.pause();
 		assertEquals(server.isPaused(), true);
 		server.resume();
 		assertEquals(server.isPaused(), false);
-		server.stop();
 	}
 	
 	@org.junit.Test
@@ -74,13 +67,7 @@ public class EvtJServerTest {
 	public void ServerGetConnectedClients() {
 		assertEquals(server.getConnectedClients(), 0);
 	}
-	
-	@org.junit.Test
-	public void ServerIntegrity() {
-		server.start();
-		server.stop();
-	}
-	
+
 	@org.junit.Test
 	public void ServerAcceptedConnection() {
 		assertEquals(server.getConnectedClients(), 0);

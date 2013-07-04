@@ -1,9 +1,12 @@
 package bytecrawl.evtj.server;
 
 import bytecrawl.evtj.server.handlers.Handler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class EvtJExecutor extends Thread implements Runnable {
 
+    private Logger logger = LoggerFactory.getLogger("EvtJServer");
 	private EvtJServer server;
 	private Handler handler;
 
@@ -28,7 +31,7 @@ public class EvtJExecutor extends Thread implements Runnable {
 	 */
 	private void sleep() {
 		try {
-			Thread.sleep(0, 500);
+			Thread.sleep(0, 100);
 		} catch (InterruptedException e) {
 			this.interrupt();
 		}
@@ -38,21 +41,35 @@ public class EvtJExecutor extends Thread implements Runnable {
 	 * Loop structure to model the states of an executable task/handler.
 	 */
 	public void run() {
-		while (server.isInitialising()) {
-			sleep();
-		}
-		while (server.isActive()) {
-			if (server.isPaused()) {
-				handler.onPause();
-				while (server.isPaused()) {
-					sleep();
-				}
-				handler.onResume();
-			}
-			handler.onRun();
-			sleep();
-		}
-		handler.onStop();
+        try {
+            while (server.isInitialising()) {
+                sleep();
+            }
+            while (server.isActive()) {
+                if(pause) {
+                    handler.onPause();
+                    while(pause) {
+                        wait();
+                    }
+                    handler.onResume();
+                }
+                handler.onRun();
+            }
+            handler.onStop();
+        }catch(Exception e) {
+
+        }
 	}
+
+    private boolean pause = false;
+
+    public synchronized void pause() {
+        pause = true;
+    }
+
+    public synchronized void unpause() {
+        pause = false;
+        this.notify();
+    }
 
 }
