@@ -66,6 +66,37 @@ public class EvtJModuleTest {
         assertEquals(2, getMockModule(server).getPauses());
     }
 
+    @org.junit.Test
+    public void serverStatsConsistency() {
+        server.start();
+        assertEquals(server.getState().getStarts(), getMockModule(server).getStarts());
+        server.start();
+        assertEquals(server.getState().getStarts(), getMockModule(server).getStarts());
+        server.pause();
+        assertEquals(server.getState().getPauses(), getMockModule(server).getPauses());
+        server.pause();
+        assertEquals(server.getState().getPauses(), getMockModule(server).getPauses());
+        server.resume();
+        assertEquals(server.getState().getResumes(), getMockModule(server).getResumes());
+        server.stop();
+        assertEquals(server.getState().getStops(), getMockModule(server).getStops());
+        server.stop();
+        assertEquals(server.getState().getStops(), getMockModule(server).getStops());
+        server.resume();
+        assertEquals(server.getState().getResumes(), getMockModule(server).getStops());
+        server.stop();
+        assertEquals(server.getState().getStops(), getMockModule(server).getStops());
+        server.start();
+        server.pause();
+        server.resume();
+        server.stop();
+        assertEquals(server.getState().getStops(), getMockModule(server).getStops());
+        assertEquals(server.getState().getStarts(), getMockModule(server).getStarts());
+        assertEquals(server.getState().getResumes(), getMockModule(server).getResumes());
+        assertEquals(server.getState().getPauses(), getMockModule(server).getPauses());
+
+    }
+
     public class CustomMockModule implements EvtJModule {
 
         private int pauses, resumes, starts, stops;
