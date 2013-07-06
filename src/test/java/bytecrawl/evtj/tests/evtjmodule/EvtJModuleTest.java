@@ -1,7 +1,7 @@
 package bytecrawl.evtj.tests.evtjmodule;
 
-import bytecrawl.evtj.server.EvtJModule;
-import bytecrawl.evtj.server.EvtJModuleWorker;
+import bytecrawl.evtj.server.modules.EvtJModule;
+import bytecrawl.evtj.server.modules.EvtJModuleWorker;
 import bytecrawl.evtj.server.EvtJServer;
 import bytecrawl.evtj.utils.EvtJClient;
 import org.junit.After;
@@ -23,7 +23,6 @@ public class EvtJModuleTest {
     public EvtJModuleTest() {
         mock_module = new CustomMockModule();
         client = new EvtJClient();
-        server = new EvtJServer(4444, mock_module);
     }
 
     public CustomMockModule getMockModule(EvtJServer server) {
@@ -31,7 +30,7 @@ public class EvtJModuleTest {
     }
 
     @Before
-    public final void setUp() { server.start(); }
+    public final void setUp() { server = new EvtJServer(4444, mock_module); server.start(); }
 
     @After
     public final void tearDown() { server.stop(); server = null; }

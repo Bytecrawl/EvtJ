@@ -1,4 +1,4 @@
-package bytecrawl.evtj.server;
+package bytecrawl.evtj.server.modules;
 
 import bytecrawl.evtj.utils.EvtJRequest;
 

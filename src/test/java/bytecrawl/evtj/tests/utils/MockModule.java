@@ -1,7 +1,7 @@
 package bytecrawl.evtj.tests.utils;
 
-import bytecrawl.evtj.server.EvtJModule;
-import bytecrawl.evtj.server.EvtJModuleWorker;
+import bytecrawl.evtj.server.modules.EvtJModule;
+import bytecrawl.evtj.server.modules.EvtJModuleWorker;
 
 public class MockModule implements EvtJModule {
 

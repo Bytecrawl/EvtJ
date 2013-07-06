@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import bytecrawl.evtj.server.EvtJModule;
+import bytecrawl.evtj.server.modules.EvtJModule;
 import bytecrawl.evtj.server.EvtJServer;
 import bytecrawl.evtj.utils.EvtJClient;
  

@@ -9,11 +9,12 @@ import java.util.concurrent.Executors;
 
 public class Worker implements Handler {
 
-    private Queue<Runnable> queue = new LinkedList<Runnable>();
-    private ExecutorService worker_pool;
+    private Queue<Runnable> runnableQueue = new LinkedList<Runnable>();
+    private ExecutorService workerPool;
+    private Runnable currentRunnable;
 
     public Worker(EvtJServer server) {
-        worker_pool = Executors.newFixedThreadPool(server.getWorkerPoolSize());
+        workerPool = Executors.newFixedThreadPool(server.getWorkerPoolSize());
     }
 
     public void onPause() {
@@ -25,23 +26,22 @@ public class Worker implements Handler {
     }
 
     public void onRun() {
-        Runnable r;
-        while (queue.size() > 0) {
-            r = pollTask();
-            worker_pool.execute(r);
+        while (runnableQueue.size() > 0) {
+            currentRunnable = popTask();
+            workerPool.execute(currentRunnable);
         }
     }
 
     public void onStop() {
-        worker_pool.shutdown();
+        workerPool.shutdown();
     }
 
-    public synchronized Runnable pollTask() {
-        return queue.poll();
+    private Runnable popTask() {
+        return runnableQueue.poll();
     }
 
     public synchronized void pushTask(Runnable r) {
-        queue.add(r);
+        runnableQueue.add(r);
     }
 
 }

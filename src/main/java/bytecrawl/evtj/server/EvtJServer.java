@@ -1,7 +1,10 @@
 package bytecrawl.evtj.server;
 
+import bytecrawl.evtj.server.executors.EvtJExecutor;
 import bytecrawl.evtj.server.handlers.Dispatcher;
 import bytecrawl.evtj.server.handlers.Worker;
+import bytecrawl.evtj.server.modules.EvtJModule;
+import bytecrawl.evtj.server.modules.EvtJModuleWorker;
 import bytecrawl.evtj.utils.EvtJClient;
 import bytecrawl.evtj.utils.EvtJRequest;
 import org.slf4j.Logger;
@@ -87,7 +90,7 @@ public class EvtJServer {
         if (state.isPaused()) return;
 
         modulePause();
-        executorsStop();
+        executorsPause();
 
         state.paused();
 
@@ -168,7 +171,6 @@ public class EvtJServer {
 
         try {
             serverChannel.close();
-            selector.close();
         } catch (IOException e) {
             logger.error("Unknown error closing ServerSocketChannel", e);
         }
@@ -177,9 +179,10 @@ public class EvtJServer {
     }
 
     private void executorsStop() {
-        executorsPause();
         dispatcherExecutor.interrupt();
         workerExecutor.interrupt();
+        while(dispatcherExecutor.isAlive()) {}
+        while(workerExecutor.isAlive()) {}
     }
 
     private void executorsPause() {

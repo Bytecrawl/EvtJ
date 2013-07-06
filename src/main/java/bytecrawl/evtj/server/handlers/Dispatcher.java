@@ -15,15 +15,14 @@ public class Dispatcher implements Handler {
 
     private final int BUFFER_SIZE = 1024;
     private final String SPLIT_SEQUENCE = "\n";
-
     private ByteBuffer buffer = ByteBuffer.allocate(BUFFER_SIZE);
     private Logger logger = LoggerFactory.getLogger("EvtJServer");
-    private int read_bytes;
+    private int readedBytes;
     private String request;
-    private String[] request_array;
-    private SelectionKey selected_key;
+    private String[] requestArray;
+    private SelectionKey selectedKey;
     private Selector selector;
-    private Iterator<SelectionKey> selector_iterator;
+    private Iterator<SelectionKey> selectorIterator;
     private EvtJServer server;
 
     public Dispatcher(EvtJServer server) {
@@ -55,24 +54,24 @@ public class Dispatcher implements Handler {
     public void onRun() {
         try {
             selector.select();
-            selector_iterator = selector.selectedKeys().iterator();
-            while (selector_iterator.hasNext()) {
-                selected_key = selector_iterator.next();
-                selector_iterator.remove();
+            selectorIterator = selector.selectedKeys().iterator();
+            while (selectorIterator.hasNext()) {
+                selectedKey = selectorIterator.next();
+                selectorIterator.remove();
 
                 /** Only handle Acceptable and Readable */
-                if (selected_key.isAcceptable()) {
-                    accept(selected_key);
-                } else if (selected_key.isReadable()) {
-                    read(selected_key);
+                if (selectedKey.isAcceptable()) {
+                    accept(selectedKey);
+                } else if (selectedKey.isReadable()) {
+                    read(selectedKey);
                 }
             }
         } catch (ClosedChannelException closed_e) {
             server.newDisconnection();
-            selected_key.cancel();
+            selectedKey.cancel();
         } catch (IOException e) {
             server.newDisconnection();
-            selected_key.cancel();
+            selectedKey.cancel();
         }
     }
 
@@ -88,18 +87,18 @@ public class Dispatcher implements Handler {
             IOException {
         EvtJClient client = new EvtJClient((SocketChannel) key.channel());
         buffer.clear();
-        read_bytes = client.getChannel().read(buffer);
+        readedBytes = client.getChannel().read(buffer);
         buffer.flip();
 
-        if (read_bytes != -1) {
+        if (readedBytes != -1) {
             request = new String(buffer.array(), buffer.position(),
                     buffer.remaining());
 
             /** If more to read, keep building the request */
-            while (read_bytes > 0) {
+            while (readedBytes > 0) {
                 buffer.clear();
-                read_bytes = client.getChannel().read(buffer);
-                if (read_bytes == -1)
+                readedBytes = client.getChannel().read(buffer);
+                if (readedBytes == -1)
                     throw new IOException();
                 buffer.flip();
                 request += new String(buffer.array(), buffer.position(),
@@ -108,14 +107,14 @@ public class Dispatcher implements Handler {
             }
 
             /** Split in case of multiple requests */
-            request_array = request.split(SPLIT_SEQUENCE);
+            requestArray = request.split(SPLIT_SEQUENCE);
 
-            for (String req : request_array) {
-                EvtJRequest request = new EvtJRequest(client, req);
+            for (String requestText : requestArray) {
+                EvtJRequest request = new EvtJRequest(client, requestText);
                 server.newServedRequest();
                 server.queue(request);
                 logger.debug("Accepted request from " + client.getIP() + ": "
-                        + req);
+                        + requestText);
             }
         } else {
             throw new ClosedChannelException();
