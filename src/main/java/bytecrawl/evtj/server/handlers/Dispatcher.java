@@ -2,6 +2,7 @@ package bytecrawl.evtj.server.handlers;
 
 import bytecrawl.evtj.server.EvtJServer;
 import bytecrawl.evtj.utils.EvtJClient;
+import bytecrawl.evtj.utils.EvtJConfiguration;
 import bytecrawl.evtj.utils.EvtJRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,8 +14,8 @@ import java.util.Iterator;
 
 public class Dispatcher implements Handler {
 
-    private final int BUFFER_SIZE = 1024;
-    private final String SPLIT_SEQUENCE = "\n";
+    private int BUFFER_SIZE = EvtJConfiguration.getInt(EvtJConfiguration.CONFIG_WORKER_POOL);
+    private String SPLIT_SEQUENCE = EvtJConfiguration.get(EvtJConfiguration.CONFIG_SPLIT_SEQUENCE);
     private ByteBuffer buffer = ByteBuffer.allocate(BUFFER_SIZE);
     private Logger logger = LoggerFactory.getLogger("EvtJServer");
     private int readedBytes;

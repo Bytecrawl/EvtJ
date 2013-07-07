@@ -30,7 +30,7 @@ public class EvtJModuleTest {
     }
 
     @Before
-    public final void setUp() { server = new EvtJServer(4444, mock_module); server.start(); }
+    public final void setUp() { server = new EvtJServer(4444, mock_module, "evtj.xml"); server.start(); }
 
     @After
     public final void tearDown() { server.stop(); server = null; }

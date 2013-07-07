@@ -1,0 +1,14 @@
+<options>
+    <option>
+        <param>worker-pool</param>
+        <value>10</value>
+    </option>
+    <option>
+        <param>split-sequence</param>
+        <value>\n</value>
+    </option>
+    <option>
+        <param>buffer-size</param>
+        <oaram>1024</oaram>
+    </option>
+</options>

@@ -6,6 +6,7 @@ import bytecrawl.evtj.server.handlers.Worker;
 import bytecrawl.evtj.server.modules.EvtJModule;
 import bytecrawl.evtj.server.modules.EvtJModuleWorker;
 import bytecrawl.evtj.utils.EvtJClient;
+import bytecrawl.evtj.utils.EvtJConfiguration;
 import bytecrawl.evtj.utils.EvtJRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +19,6 @@ import java.nio.channels.ServerSocketChannel;
 
 public class EvtJServer {
 
-    final private int worker_pool_size = 5;
     private int clientsConnected;
     private ServerSocketChannel serverChannel;
     private Selector selector;
@@ -34,6 +34,15 @@ public class EvtJServer {
         this.PORT = port;
         this.module = module;
         this.state = new EvtJState();
+        EvtJConfiguration.newConfiguration();
+    }
+
+    public EvtJServer(int port, EvtJModule module, String configurationPath) {
+        this.clientsConnected = 0;
+        this.PORT = port;
+        this.module = module;
+        this.state = new EvtJState();
+        EvtJConfiguration.newConfiguration(configurationPath);
     }
 
     public synchronized EvtJState getState() {
@@ -50,10 +59,6 @@ public class EvtJServer {
 
     public synchronized Selector getSelector() {
         return selector;
-    }
-
-    public synchronized int getWorkerPoolSize() {
-        return worker_pool_size;
     }
 
     private void channelInitialize(int port) throws IOException {
@@ -181,8 +186,10 @@ public class EvtJServer {
     private void executorsStop() {
         dispatcherExecutor.interrupt();
         workerExecutor.interrupt();
-        while(dispatcherExecutor.isAlive()) {}
-        while(workerExecutor.isAlive()) {}
+        while (dispatcherExecutor.isAlive()) {
+        }
+        while (workerExecutor.isAlive()) {
+        }
     }
 
     private void executorsPause() {

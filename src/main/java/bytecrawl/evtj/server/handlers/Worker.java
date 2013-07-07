@@ -1,6 +1,7 @@
 package bytecrawl.evtj.server.handlers;
 
 import bytecrawl.evtj.server.EvtJServer;
+import bytecrawl.evtj.utils.EvtJConfiguration;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -14,7 +15,8 @@ public class Worker implements Handler {
     private Runnable currentRunnable;
 
     public Worker(EvtJServer server) {
-        workerPool = Executors.newFixedThreadPool(server.getWorkerPoolSize());
+        int size = EvtJConfiguration.getInt(EvtJConfiguration.CONFIG_WORKER_POOL);
+        workerPool = Executors.newFixedThreadPool(size);
     }
 
     public void onPause() {
