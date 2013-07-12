@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>bytecrawl.evtj</groupId>
     <artifactId>evtj</artifactId>
-    <version>0.1.0-beta</version>
+    <version>0.3.0-beta</version>
     <name>Evented Java server engine</name>
     <build>
         <pluginManagement>

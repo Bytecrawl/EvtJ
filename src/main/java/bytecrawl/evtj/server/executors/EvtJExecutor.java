@@ -54,6 +54,9 @@ public class EvtJExecutor extends Thread implements Runnable {
                     }
                 }
                 handler.onRun();
+                synchronized (this) {
+                    wait();
+                }
             }
             handler.onStop();
         } catch (InterruptedException e) {

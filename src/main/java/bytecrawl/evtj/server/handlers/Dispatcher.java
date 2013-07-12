@@ -104,7 +104,6 @@ public class Dispatcher implements Handler {
                 buffer.flip();
                 request += new String(buffer.array(), buffer.position(),
                         buffer.remaining());
-                ;
             }
 
             /** Split in case of multiple requests */
