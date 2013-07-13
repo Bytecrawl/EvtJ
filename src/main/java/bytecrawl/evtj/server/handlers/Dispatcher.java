@@ -1,7 +1,6 @@
 package bytecrawl.evtj.server.handlers;
 
 import bytecrawl.evtj.server.EvtJServer;
-import bytecrawl.evtj.utils.EvtJBalancer;
 import bytecrawl.evtj.utils.EvtJClient;
 import bytecrawl.evtj.utils.EvtJConfiguration;
 import bytecrawl.evtj.utils.EvtJRequest;
@@ -26,12 +25,10 @@ public class Dispatcher implements Handler {
     private Selector selector;
     private Iterator<SelectionKey> selectorIterator;
     private EvtJServer server;
-    private EvtJBalancer balancer;
 
     public Dispatcher(EvtJServer server) {
         this.server = server;
         this.selector = server.getSelector();
-        this.balancer = new EvtJBalancer();
     }
 
     /**
@@ -57,7 +54,6 @@ public class Dispatcher implements Handler {
 
     public void onRun() {
         try {
-            balancer.setCycle();
             selector.select();
             selectorIterator = selector.selectedKeys().iterator();
             while (selectorIterator.hasNext()) {
@@ -67,13 +63,10 @@ public class Dispatcher implements Handler {
                 /** Only handle Acceptable and Readable */
                 if (selectedKey.isAcceptable()) {
                     accept(selectedKey);
-                    balancer.setActive();
                 } else if (selectedKey.isReadable()) {
                     read(selectedKey);
-                    balancer.setActive();
                 }
             }
-            balancer.balance();
         } catch (ClosedChannelException closed_e) {
             server.newDisconnection();
             selectedKey.cancel();

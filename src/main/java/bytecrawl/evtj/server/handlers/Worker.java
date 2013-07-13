@@ -1,25 +1,23 @@
 package bytecrawl.evtj.server.handlers;
 
 import bytecrawl.evtj.server.EvtJServer;
-import bytecrawl.evtj.utils.EvtJBalancer;
 import bytecrawl.evtj.utils.EvtJConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 public class Worker implements Handler {
 
-    private Queue<Runnable> runnableQueue = new LinkedList<Runnable>();
+    private Logger logger = LoggerFactory.getLogger("EvtJServer");
+
+    private BlockingQueue<Runnable> runnableQueue = new ArrayBlockingQueue<Runnable>(1000);
     private ExecutorService workerPool;
     private Runnable currentRunnable;
-    private EvtJBalancer balancer;
 
     public Worker(EvtJServer server) {
         int size = EvtJConfiguration.getInt(EvtJConfiguration.CONFIG_WORKER_POOL);
         workerPool = Executors.newFixedThreadPool(size);
-        this.balancer = new EvtJBalancer();
     }
 
     public void onPause() {
@@ -31,24 +29,19 @@ public class Worker implements Handler {
     }
 
     public void onRun() {
-        balancer.setCycle();
-        if(runnableQueue.size()>0) balancer.setActive();
-        while (runnableQueue.size() > 0) {
-            currentRunnable = popTask();
+        try {
+            currentRunnable = runnableQueue.take();
             workerPool.execute(currentRunnable);
+        } catch (InterruptedException e) {
+            //logger.debug("Worker pool interrupted.");
         }
-        balancer.balance();
     }
 
     public void onStop() {
         workerPool.shutdown();
     }
 
-    private Runnable popTask() {
-        return runnableQueue.poll();
-    }
-
-    public synchronized void pushTask(Runnable r) {
+    public void pushTask(Runnable r) {
         runnableQueue.add(r);
     }
 
