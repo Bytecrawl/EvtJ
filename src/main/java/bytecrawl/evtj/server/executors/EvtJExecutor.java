@@ -16,11 +16,16 @@ public class EvtJExecutor extends Thread implements Runnable {
 
     /**
      * @param server  reference to the server that spawns the executor
-     * @param handler reference to the handler that is going to be run by this
+     */
+    public EvtJExecutor(EvtJServer server) {
+        this.server = server;
+    }
+
+    /**
+     * @param handler handler reference to the handler that is going to be run by this
      *                executor.
      */
-    public EvtJExecutor(EvtJServer server, Handler handler) {
-        this.server = server;
+    public void setHandler(Handler handler) {
         this.handler = handler;
     }
 
@@ -54,9 +59,6 @@ public class EvtJExecutor extends Thread implements Runnable {
                     }
                 }
                 handler.onRun();
-                synchronized (this) {
-                    wait();
-                }
             }
             handler.onStop();
         } catch (InterruptedException e) {

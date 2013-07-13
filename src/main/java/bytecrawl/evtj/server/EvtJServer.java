@@ -151,8 +151,14 @@ public class EvtJServer {
     }
 
     private void executorsStart() {
-        workerExecutor = new EvtJExecutor(this, new Worker(this));
-        dispatcherExecutor = new EvtJExecutor(this, new Dispatcher(this));
+        workerExecutor = new EvtJExecutor(this);
+        dispatcherExecutor = new EvtJExecutor(this);
+
+        Worker worker = new Worker(this);
+        Dispatcher dispatcher = new Dispatcher(this);
+
+        workerExecutor.setHandler(worker);
+        dispatcherExecutor.setHandler(dispatcher);
 
         workerExecutor.start();
         dispatcherExecutor.start();

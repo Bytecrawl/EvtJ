@@ -1,6 +1,7 @@
 package bytecrawl.evtj.server.handlers;
 
 import bytecrawl.evtj.server.EvtJServer;
+import bytecrawl.evtj.utils.EvtJBalancer;
 import bytecrawl.evtj.utils.EvtJConfiguration;
 
 import java.util.LinkedList;
@@ -13,10 +14,12 @@ public class Worker implements Handler {
     private Queue<Runnable> runnableQueue = new LinkedList<Runnable>();
     private ExecutorService workerPool;
     private Runnable currentRunnable;
+    private EvtJBalancer balancer;
 
     public Worker(EvtJServer server) {
         int size = EvtJConfiguration.getInt(EvtJConfiguration.CONFIG_WORKER_POOL);
         workerPool = Executors.newFixedThreadPool(size);
+        this.balancer = new EvtJBalancer();
     }
 
     public void onPause() {
@@ -28,10 +31,13 @@ public class Worker implements Handler {
     }
 
     public void onRun() {
+        balancer.setCycle();
+        if(runnableQueue.size()>0) balancer.setActive();
         while (runnableQueue.size() > 0) {
             currentRunnable = popTask();
             workerPool.execute(currentRunnable);
         }
+        balancer.balance();
     }
 
     public void onStop() {
