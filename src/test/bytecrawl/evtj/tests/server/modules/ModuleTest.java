@@ -1,5 +1,6 @@
-package bytecrawl.evtj.tests.evtjmodule;
+package bytecrawl.evtj.tests.server.modules;
 
+import bytecrawl.evtj.config.ConfigurationException;
 import bytecrawl.evtj.server.EvtJServer;
 import bytecrawl.evtj.server.modules.Module;
 import bytecrawl.evtj.server.requests.Client;
@@ -10,21 +11,21 @@ import org.slf4j.LoggerFactory;
 
 import static org.junit.Assert.assertEquals;
 
-public class EvtJModuleTest {
+public class ModuleTest {
 
     private static final Logger logger =
-            LoggerFactory.getLogger(EvtJModuleTest.class);
+            LoggerFactory.getLogger(ModuleTest.class);
 
     private EvtJServer server;
     private CounterModule counterModule;
 
-    public EvtJModuleTest() {
+    public ModuleTest() {
         counterModule = new CounterModule();
     }
 
     @Before
-    public final void setUp() {
-        server = new EvtJServer(4444, counterModule, "evtj.xml");
+    public final void setUp() throws ConfigurationException {
+        server = new EvtJServer(4444, counterModule, "src/evtj.xml");
         server.start();
     }
 

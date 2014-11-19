@@ -19,7 +19,7 @@ public class ExecutionPool implements Executable {
     private Runnable currentRunnable;
 
     public ExecutionPool(EvtJServer server) {
-        int size = Configuration.getInt(Configuration.CONFIG_WORKER_POOL);
+        int size = Configuration.getInt(Configuration.CFG_WORKER_POOL);
         workerPool = Executors.newFixedThreadPool(size);
     }
 

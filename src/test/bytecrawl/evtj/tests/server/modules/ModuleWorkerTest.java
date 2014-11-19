@@ -1,20 +1,21 @@
-package bytecrawl.evtj.tests.evtjmodule;
+package bytecrawl.evtj.tests.server.modules;
 
 
+import bytecrawl.evtj.config.ConfigurationException;
 import bytecrawl.evtj.server.EvtJServer;
 import bytecrawl.evtj.tests.mocks.MockModule;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class EvtJModuleWorkerTest {
+public class ModuleWorkerTest {
 
     private EvtJServer server;
     private MockModule mockModule = new MockModule();
 
     @Before
-    public final void setUp() {
-        server = new EvtJServer(4444, mockModule, "evtj.xml");
+    public final void setUp() throws ConfigurationException {
+        server = new EvtJServer(4444, mockModule, "src/evtj.xml");
         server.start();
     }
 

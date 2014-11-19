@@ -13,8 +13,8 @@ import java.util.Iterator;
 
 public class RequestDispatcher implements Executable {
 
-    private int BUFFER_SIZE = Configuration.getInt(Configuration.CONFIG_WORKER_POOL);
-    private String SPLIT_SEQUENCE = Configuration.get(Configuration.CONFIG_SPLIT_SEQUENCE);
+    private int BUFFER_SIZE = Configuration.getInt(Configuration.CFG_WORKER_POOL);
+    private String SPLIT_SEQUENCE = Configuration.get(Configuration.CFG_SPLIT_SEQUENCE);
     private ByteBuffer buffer = ByteBuffer.allocate(BUFFER_SIZE);
     private Logger logger = LoggerFactory.getLogger("EvtJServer");
     private SelectionKey selectedKey;

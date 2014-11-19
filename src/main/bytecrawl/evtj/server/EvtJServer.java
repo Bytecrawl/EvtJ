@@ -1,6 +1,7 @@
 package bytecrawl.evtj.server;
 
 import bytecrawl.evtj.config.Configuration;
+import bytecrawl.evtj.config.ConfigurationException;
 import bytecrawl.evtj.executors.ExecutionPool;
 import bytecrawl.evtj.executors.ThreadedExecutor;
 import bytecrawl.evtj.server.modules.Module;
@@ -36,7 +37,7 @@ public class EvtJServer {
         Configuration.newConfiguration();
     }
 
-    public EvtJServer(int port, Module module, String configurationPath) {
+    public EvtJServer(int port, Module module, String configurationPath) throws ConfigurationException {
         this.clientsConnected = 0;
         this.port = port;
         this.module = module;

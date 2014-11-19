@@ -1,5 +1,6 @@
-package bytecrawl.evtj.tests.evtjserver;
+package bytecrawl.evtj.tests.server;
 
+import bytecrawl.evtj.config.ConfigurationException;
 import bytecrawl.evtj.server.EvtJServer;
 import bytecrawl.evtj.server.modules.Module;
 import bytecrawl.evtj.server.requests.Client;
@@ -28,8 +29,8 @@ public class EvtJServerTest {
     }
 
     @Before
-    public final void setUp() {
-        server = new EvtJServer(4444, mockModule, "evtj.xml");
+    public final void setUp() throws ConfigurationException {
+        server = new EvtJServer(4444, mockModule, "src/evtj.xml");
         server.start();
     }
 

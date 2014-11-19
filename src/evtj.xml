@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<configuration>
+    <option name="worker-pool">11</option>
+    <option name="split-sequence">\r\n</option>
+    <option name="buffer-size">1025</option>
+    <option name="non-authorized">This option should be removed</option>
+</configuration>
