@@ -43,7 +43,7 @@ public class ExecutionThread extends Thread implements Runnable {
                 if (pause) {
                     executable.onPause();
                     while (pause) {
-                        wait();
+                        sleep();
                     }
                     executable.onResume();
                 }
