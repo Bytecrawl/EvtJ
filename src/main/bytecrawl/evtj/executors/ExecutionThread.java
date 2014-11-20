@@ -40,14 +40,12 @@ public class ExecutionThread extends Thread implements Runnable {
                 sleep();
             }
             while (state.isActive()) {
-                synchronized (this) {
-                    if (pause) {
-                        executable.onPause();
-                        while (pause) {
-                            wait();
-                        }
-                        executable.onResume();
+                if (pause) {
+                    executable.onPause();
+                    while (pause) {
+                        wait();
                     }
+                    executable.onResume();
                 }
                 executable.onRun();
             }
