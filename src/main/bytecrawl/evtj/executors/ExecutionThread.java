@@ -1,30 +1,22 @@
 package bytecrawl.evtj.executors;
 
-import bytecrawl.evtj.server.EvtJServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.channels.ClosedSelectorException;
 
-public class ThreadedExecutor extends Thread implements Runnable {
+public class ExecutionThread extends Thread implements Runnable {
 
     private Logger logger = LoggerFactory.getLogger("EvtJServer");
-    private EvtJServer server;
+    private bytecrawl.evtj.server.State state;
     private Executable executable;
     private boolean pause = false;
 
     /**
-     * @param server reference to the server that spawns the executor
+     * @param state reference to the state that spawns the executor
      */
-    public ThreadedExecutor(EvtJServer server) {
-        this.server = server;
-    }
-
-    /**
-     * @param executable executable reference to the executable that is going to be run by this
-     *                   executor.
-     */
-    public void setExecutable(Executable executable) {
+    public ExecutionThread(bytecrawl.evtj.server.State state, Executable executable) {
+        this.state = state;
         this.executable = executable;
     }
 
@@ -44,10 +36,10 @@ public class ThreadedExecutor extends Thread implements Runnable {
      */
     public void run() {
         try {
-            while (server.isInitialising()) {
+            while (state.isInitialising()) {
                 sleep();
             }
-            while (server.isActive()) {
+            while (state.isActive()) {
                 synchronized (this) {
                     if (pause) {
                         executable.onPause();
@@ -61,9 +53,9 @@ public class ThreadedExecutor extends Thread implements Runnable {
             }
             executable.onStop();
         } catch (InterruptedException e) {
-
+            System.out.println("Interrupted");
         } catch (ClosedSelectorException s) {
-
+            System.out.println("Closed");
         }
     }
 

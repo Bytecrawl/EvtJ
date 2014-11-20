@@ -2,6 +2,7 @@ package bytecrawl.evtj.tests.server;
 
 import bytecrawl.evtj.config.ConfigurationException;
 import bytecrawl.evtj.server.EvtJServer;
+import bytecrawl.evtj.server.State;
 import bytecrawl.evtj.server.modules.Module;
 import bytecrawl.evtj.server.requests.Client;
 import bytecrawl.evtj.tests.mocks.MockModule;
@@ -21,6 +22,7 @@ public class EvtJServerTest {
 
     private Module mockModule;
     private EvtJServer server;
+    private State state;
     private Client client;
 
     public EvtJServerTest() {
@@ -32,6 +34,7 @@ public class EvtJServerTest {
     public final void setUp() throws ConfigurationException {
         server = new EvtJServer(4444, mockModule, "src/evtj.xml");
         server.start();
+        state = server.getState();
     }
 
     @After
@@ -41,27 +44,27 @@ public class EvtJServerTest {
 
     @org.junit.Test
     public void ServerInitialisation() {
-        assertEquals(server.isActive(), true);
+        assertEquals(state.isActive(), true);
     }
 
     @org.junit.Test
     public void ServerPause() {
         server.pause();
-        assertEquals(server.isPaused(), true);
+        assertEquals(state.isPaused(), true);
     }
 
     @org.junit.Test
     public void ServerStop() {
         server.stop();
-        assertEquals(server.isActive(), false);
+        assertEquals(state.isActive(), false);
     }
 
     @org.junit.Test
     public void ServerPauseAndResume() {
         server.pause();
-        assertEquals(server.isPaused(), true);
+        assertEquals(state.isPaused(), true);
         server.resume();
-        assertEquals(server.isPaused(), false);
+        assertEquals(state.isPaused(), false);
     }
 
     @org.junit.Test

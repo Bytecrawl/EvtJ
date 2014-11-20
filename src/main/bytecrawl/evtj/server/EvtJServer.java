@@ -3,7 +3,7 @@ package bytecrawl.evtj.server;
 import bytecrawl.evtj.config.Configuration;
 import bytecrawl.evtj.config.ConfigurationException;
 import bytecrawl.evtj.executors.ExecutionPool;
-import bytecrawl.evtj.executors.ThreadedExecutor;
+import bytecrawl.evtj.executors.ExecutionThread;
 import bytecrawl.evtj.server.modules.Module;
 import bytecrawl.evtj.server.requests.Client;
 import bytecrawl.evtj.server.requests.Request;
@@ -22,8 +22,8 @@ public class EvtJServer {
     private int clientsConnected;
     private ServerSocketChannel serverChannel;
     private Selector selector;
-    private ThreadedExecutor dispatcherExecutor;
-    private ThreadedExecutor workerExecutor;
+    private ExecutionThread dispatcherExecutor;
+    private ExecutionThread workerExecutor;
     private Module module;
     private int port;
     private Logger logger = LoggerFactory.getLogger("EvtJServer");
@@ -68,10 +68,6 @@ public class EvtJServer {
         serverChannel.register(selector, SelectionKey.OP_ACCEPT);
     }
 
-    public boolean isInitialising() {
-        return state.isInitialising();
-    }
-
     public synchronized void newAcceptedConnection(Client client) {
         clientsConnected++;
         logger.info("Connection accepted from " + client.getAddress() +
@@ -114,9 +110,9 @@ public class EvtJServer {
             worker.setRequest(request);
             handler.pushTask(worker);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         } catch (InstantiationException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }
     }
 
@@ -158,14 +154,11 @@ public class EvtJServer {
     }
 
     private void executorsStart() {
-        workerExecutor = new ThreadedExecutor(this);
-        dispatcherExecutor = new ThreadedExecutor(this);
-
         ExecutionPool executionPool = new ExecutionPool(this);
         RequestDispatcher requestDispatcher = new RequestDispatcher(this);
 
-        workerExecutor.setExecutable(executionPool);
-        dispatcherExecutor.setExecutable(requestDispatcher);
+        workerExecutor = new ExecutionThread(state, executionPool);
+        dispatcherExecutor = new ExecutionThread(state, requestDispatcher);
 
         workerExecutor.start();
         dispatcherExecutor.start();
@@ -229,14 +222,6 @@ public class EvtJServer {
 
     private void moduleResume() {
         module.onResume();
-    }
-
-    public boolean isActive() {
-        return state.isActive();
-    }
-
-    public boolean isPaused() {
-        return state.isPaused();
     }
 
 }
