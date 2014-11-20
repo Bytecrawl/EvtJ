@@ -53,9 +53,9 @@ public class ExecutionThread extends Thread implements Runnable {
             }
             executable.onStop();
         } catch (InterruptedException e) {
-            System.out.println("Interrupted");
+            executable.onStop();
         } catch (ClosedSelectorException s) {
-            System.out.println("Closed");
+            executable.onStop();
         }
     }
 
@@ -65,7 +65,6 @@ public class ExecutionThread extends Thread implements Runnable {
 
     public synchronized void unpause() {
         pause = false;
-        this.notify();
     }
 
 }
