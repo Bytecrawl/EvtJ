@@ -18,7 +18,7 @@ public class ExecutionPool implements Executable {
     private ExecutorService workerPool;
     private Runnable currentRunnable;
 
-    public ExecutionPool(EvtJServer server) {
+    public ExecutionPool() {
         int size = Configuration.getInt(Configuration.CFG_WORKER_POOL);
         workerPool = Executors.newFixedThreadPool(size);
     }
@@ -36,7 +36,7 @@ public class ExecutionPool implements Executable {
             currentRunnable = runnableQueue.take();
             workerPool.execute(currentRunnable);
         } catch (InterruptedException e) {
-            //logger.debug("ExecutionPool pool interrupted.");
+
         }
     }
 

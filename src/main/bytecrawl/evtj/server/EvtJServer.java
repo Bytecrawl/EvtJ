@@ -23,7 +23,7 @@ public class EvtJServer {
     private ServerSocketChannel serverChannel;
     private Selector selector;
     private ExecutionThread dispatcherExecutor;
-    private ExecutionThread workerExecutor;
+    private ExecutionThread workerPoolExecutor;
     private Module module;
     private int port;
     private Logger logger = LoggerFactory.getLogger("EvtJServer");
@@ -90,7 +90,7 @@ public class EvtJServer {
     public synchronized void pause() {
         if (state.isPaused()) return;
 
-        modulePause();
+        module.onPause();
         executorsPause();
 
         state.paused();
@@ -103,7 +103,7 @@ public class EvtJServer {
      * by passing a custom module worker for said request.
      */
     public synchronized void queue(Request request) {
-        ExecutionPool handler = (ExecutionPool) workerExecutor.getExecutable();
+        ExecutionPool handler = (ExecutionPool) workerPoolExecutor.getExecutable();
         Module worker;
         try {
             worker = module.getWorker();
@@ -122,7 +122,7 @@ public class EvtJServer {
             return;
         }
 
-        moduleResume();
+        module.onResume();
         executorsResume();
 
         state.resumed();
@@ -140,7 +140,7 @@ public class EvtJServer {
 
             selectorOpen();
             channelInitialize(port);
-            moduleStart();
+            module.onStart();
             executorsStart();
 
             state.started();
@@ -154,16 +154,16 @@ public class EvtJServer {
     }
 
     private void executorsStart() {
-        ExecutionPool executionPool = new ExecutionPool(this);
+        ExecutionPool executionPool = new ExecutionPool();
         RequestDispatcher requestDispatcher = new RequestDispatcher(this);
 
-        workerExecutor = new ExecutionThread(state, executionPool);
+        workerPoolExecutor = new ExecutionThread(state, executionPool);
         dispatcherExecutor = new ExecutionThread(state, requestDispatcher);
 
-        workerExecutor.start();
+        workerPoolExecutor.start();
         dispatcherExecutor.start();
 
-        while (!workerExecutor.isAlive()) {
+        while (!workerPoolExecutor.isAlive()) {
         }
         while (!dispatcherExecutor.isAlive()) {
         }
@@ -177,7 +177,7 @@ public class EvtJServer {
 
         state.stopped();
 
-        moduleStop();
+        module.onStop();
         executorsStop();
 
         try {
@@ -191,37 +191,21 @@ public class EvtJServer {
 
     private void executorsStop() {
         dispatcherExecutor.interrupt();
-        workerExecutor.interrupt();
+        workerPoolExecutor.interrupt();
         while (dispatcherExecutor.isAlive()) {
         }
-        while (workerExecutor.isAlive()) {
+        while (workerPoolExecutor.isAlive()) {
         }
     }
 
     private void executorsPause() {
         dispatcherExecutor.pause();
-        workerExecutor.pause();
+        workerPoolExecutor.pause();
     }
 
     private void executorsResume() {
         dispatcherExecutor.unpause();
-        workerExecutor.unpause();
-    }
-
-    private void moduleStart() {
-        module.onStart();
-    }
-
-    private void moduleStop() {
-        module.onStop();
-    }
-
-    private void modulePause() {
-        module.onPause();
-    }
-
-    private void moduleResume() {
-        module.onResume();
+        workerPoolExecutor.unpause();
     }
 
 }
