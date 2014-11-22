@@ -2,17 +2,14 @@ package bytecrawl.evtj.tests.config;
 
 import bytecrawl.evtj.config.Configuration;
 import bytecrawl.evtj.config.ConfigurationException;
+import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 public class ConfigurationTest {
 
-    public ConfigurationTest() {
-
-    }
-
-    @org.junit.Test
+    @Test
     public void testFileOpen() {
         try {
             Configuration.newConfiguration("src/evtj.xml");
@@ -21,7 +18,7 @@ public class ConfigurationTest {
         }
     }
 
-    @org.junit.Test
+    @Test
     public void testFileParse() {
         try {
             Configuration.newConfiguration("src/evtj.xml");
@@ -33,7 +30,7 @@ public class ConfigurationTest {
         }
     }
 
-    @org.junit.Test
+    @Test
     public void testDefaultConfiguration() {
         Configuration.newConfiguration();
         assertEquals("10", Configuration.get(Configuration.CFG_WORKER_POOL));
@@ -41,8 +38,9 @@ public class ConfigurationTest {
         assertEquals("\n", Configuration.get(Configuration.CFG_SPLIT_SEQUENCE));
     }
 
-    @org.junit.Test
+    @Test
     public void testNotAllowedOptionIsFiltered() {
+        Configuration.newConfiguration();
         assertEquals(null, Configuration.get("non-authorized"));
     }
 

@@ -34,10 +34,10 @@ public class Configuration {
             LoggerFactory.getLogger(Configuration.class);
 
     // Path to the configuration file
-    private static String configPath;
+    private static String configPath = "";
 
     // HashMap for storing configuration key values
-    private static HashMap<String, String> configMap;
+    private static HashMap<String, String> configMap = new HashMap<String, String>();
 
     // Key definition
     final public static String CFG_WORKER_POOL = "worker-pool";
