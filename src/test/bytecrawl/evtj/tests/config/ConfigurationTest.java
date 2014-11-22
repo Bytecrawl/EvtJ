@@ -34,7 +34,7 @@ public class ConfigurationTest {
     }
 
     @org.junit.Test
-    public  void testDefaultConfiguration() {
+    public void testDefaultConfiguration() {
         Configuration.newConfiguration();
         assertEquals("10", Configuration.get(Configuration.CFG_WORKER_POOL));
         assertEquals("1024", Configuration.get(Configuration.CFG_BUFFER_SIZE));
@@ -42,7 +42,7 @@ public class ConfigurationTest {
     }
 
     @org.junit.Test
-    public  void testNotAllowedOptionIsFiltered() {
+    public void testNotAllowedOptionIsFiltered() {
         assertEquals(null, Configuration.get("non-authorized"));
     }
 
