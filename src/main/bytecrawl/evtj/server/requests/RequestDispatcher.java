@@ -9,12 +9,15 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.*;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class RequestDispatcher implements Executable {
 
     private int BUFFER_SIZE = Configuration.getInt(Configuration.CFG_WORKER_POOL);
     private String SPLIT_SEQUENCE = Configuration.get(Configuration.CFG_SPLIT_SEQUENCE);
+    private int SPLIT_SEQUENCE_LEN = SPLIT_SEQUENCE.length();
     private ByteBuffer buffer = ByteBuffer.allocate(BUFFER_SIZE);
     private Logger logger = LoggerFactory.getLogger("EvtJServer");
     private SelectionKey selectedKey;
@@ -106,18 +109,23 @@ public class RequestDispatcher implements Executable {
             return;
         }
 
-        /** There are request/s to process, remove attachment in the key */
-        key.attach(null);
-
         /** Split in case of multiple requests */
-        String[] requestArray = attachment.split(SPLIT_SEQUENCE);
+        List<String> requestList = new ArrayList<String>();
+        while (attachment.contains(SPLIT_SEQUENCE)) {
+            int match = attachment.indexOf(SPLIT_SEQUENCE);
+            int length = attachment.length();
+            requestList.add(attachment.substring(0, match));
+            attachment = attachment.substring(match + SPLIT_SEQUENCE_LEN, length);
+        }
 
-        for (String requestText : requestArray) {
+        if (attachment.length() > 0) key.attach(attachment);
+        else key.attach(null);
+
+        for (String requestText : requestList) {
             Request req = new Request(client, requestText);
             server.newServedRequest();
             server.queue(req);
-            logger.info("Request from " + client.getAddress() + ": "
-                    + requestText);
+            logger.info("Request from " + client.getAddress() + ": " + requestText);
         }
     }
 

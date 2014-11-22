@@ -50,4 +50,13 @@ public class EchoServerTest {
         assertEquals(m1 + m2 + m3, client.read());
     }
 
+    @Test
+    public void testEchoIsCorrectOnHalfRequest() {
+        client = new MockClient(4000);
+        client.send("Complete request\nHalf ");
+        assertEquals("Complete request", client.read());
+        client.send("request\n");
+        assertEquals("Half request", client.read());
+    }
+
 }
