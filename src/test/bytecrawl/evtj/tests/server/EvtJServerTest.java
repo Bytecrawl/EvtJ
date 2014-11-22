@@ -8,6 +8,7 @@ import bytecrawl.evtj.server.requests.Client;
 import bytecrawl.evtj.tests.mocks.MockModule;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,8 +32,8 @@ public class EvtJServerTest {
     }
 
     @Before
-    public final void setUp() throws ConfigurationException {
-        server = new EvtJServer(4444, mockModule, "src/evtj.xml");
+    public final void setUp() throws ConfigurationException, InterruptedException {
+        server = new EvtJServer(4000, mockModule);
         server.start();
         state = server.getState();
     }
@@ -42,24 +43,24 @@ public class EvtJServerTest {
         server.stop();
     }
 
-    @org.junit.Test
+    @Test
     public void ServerInitialisation() {
         assertEquals(state.isActive(), true);
     }
 
-    @org.junit.Test
+    @Test
     public void ServerPause() {
         server.pause();
         assertEquals(state.isPaused(), true);
     }
 
-    @org.junit.Test
+    @Test
     public void ServerStop() {
         server.stop();
         assertEquals(state.isActive(), false);
     }
 
-    @org.junit.Test
+    @Test
     public void ServerPauseAndResume() {
         server.pause();
         assertEquals(state.isPaused(), true);
@@ -67,18 +68,18 @@ public class EvtJServerTest {
         assertEquals(state.isPaused(), false);
     }
 
-    @org.junit.Test
+    @Test
     public void ServerGetModule() {
         assertNotNull(server.getModule());
         assertEquals(server.getModule() == mockModule, true);
     }
 
-    @org.junit.Test
+    @Test
     public void ServerGetConnectedClients() {
         assertEquals(server.getConnectedClients(), 0);
     }
 
-    @org.junit.Test
+    @Test
     public void ServerAcceptedConnection() {
         assertEquals(server.getConnectedClients(), 0);
         server.newAcceptedConnection(client);
