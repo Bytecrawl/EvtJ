@@ -25,7 +25,7 @@ public class ModuleTest {
 
     @Before
     public final void setUp() throws ConfigurationException {
-        server = new EvtJServer(4444, counterModule, "src/evtj.xml");
+        server = new EvtJServer(4000, counterModule, "src/evtj.xml");
         server.start();
     }
 

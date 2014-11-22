@@ -21,7 +21,7 @@ public class ExecutionThreadTest {
     public final void setUp() throws ConfigurationException {
         module = new MockModule();
         executable = new MockExecutable();
-        server = new EvtJServer(3000, module);
+        server = new EvtJServer(4000, module);
         server.start();
     }
 
