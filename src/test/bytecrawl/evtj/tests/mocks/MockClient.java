@@ -23,7 +23,6 @@ public class MockClient {
     }
 
     public void send(String str) {
-        str = str + "\r\n";
         out.write(str);
         out.flush();
     }

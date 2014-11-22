@@ -32,8 +32,22 @@ public class EchoServerTest {
     public void testEchoIsCorrect() {
         client = new MockClient(4000);
         String message = "Hello world !";
-        client.send(message);
+        client.send(message+"\n");
         assertEquals(message, client.read());
+    }
+
+    @Test
+    public void testEchoIsCorrectOnMultipleWrites() {
+        client = new MockClient(4000);
+        String m1 = "Hello ";
+        String m2 = "World ";
+        String m3 = "!";
+        String m4 = "\n";
+        client.send(m1);
+        client.send(m2);
+        client.send(m3);
+        client.send(m4);
+        assertEquals(m1+m2+m3, client.read());
     }
 
 }

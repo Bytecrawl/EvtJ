@@ -81,37 +81,45 @@ public class RequestDispatcher implements Executable {
 
     private void read(SelectionKey key) throws IOException {
         Client client = new Client((SocketChannel) key.channel());
+        String request = "";
+        int readedBytes;
+
         buffer.clear();
-        int readedBytes = client.getChannel().read(buffer);
+        readedBytes = client.getChannel().read(buffer);
         buffer.flip();
 
-        if (readedBytes != -1) {
-            String request1 = new String(buffer.array(), buffer.position(),
-                    buffer.remaining());
-
+        while (readedBytes > 0) {
+            request += new String(buffer.array(), buffer.position(), buffer.remaining());
             /** If more to read, keep building the request */
-            while (readedBytes > 0) {
-                buffer.clear();
-                readedBytes = client.getChannel().read(buffer);
-                if (readedBytes == -1)
-                    throw new IOException();
-                buffer.flip();
-                request1 += new String(buffer.array(), buffer.position(),
-                        buffer.remaining());
-            }
+            buffer.clear();
+            readedBytes = client.getChannel().read(buffer);
+            buffer.flip();
+        }
 
-            /** Split in case of multiple requests */
-            String[] requestArray = request1.split(SPLIT_SEQUENCE);
+        /** Fetch attachment and append the readed content */
+        String attachment;
+        if (key.attachment() != null) attachment = (String) key.attachment();
+        else attachment = "";
+        attachment += request;
 
-            for (String requestText : requestArray) {
-                Request request = new Request(client, requestText);
-                server.newServedRequest();
-                server.queue(request);
-                logger.debug("Accepted request from " + client.getAddress() + ": "
-                        + requestText);
-            }
-        } else {
-            throw new ClosedChannelException();
+        /** If there is no split sequence attach the request and return */
+        if (!attachment.contains(SPLIT_SEQUENCE)) {
+            key.attach(attachment);
+            return;
+        }
+
+        /** There are request/s to process, remove attachment in the key */
+        key.attach(null);
+
+        /** Split in case of multiple requests */
+        String[] requestArray = attachment.split(SPLIT_SEQUENCE);
+
+        for (String requestText : requestArray) {
+            Request req = new Request(client, requestText);
+            server.newServedRequest();
+            server.queue(req);
+            logger.info("Request from " + client.getAddress() + ": "
+                    + requestText);
         }
     }
 
