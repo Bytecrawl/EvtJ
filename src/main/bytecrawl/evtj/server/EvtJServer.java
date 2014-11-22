@@ -74,9 +74,9 @@ public class EvtJServer {
                 " [ " + clientsConnected + " online clients ]");
     }
 
-    public synchronized void newDisconnection() {
+    public synchronized void newDisconnection(Client client) {
         clientsConnected--;
-        logger.info("Disconnection");
+        logger.info("Disconnection from " + client.getAddress());
     }
 
     public synchronized void newServedRequest() {

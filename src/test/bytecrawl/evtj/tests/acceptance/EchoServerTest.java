@@ -47,7 +47,7 @@ public class EchoServerTest {
         client.send(m2);
         client.send(m3);
         client.send(m4);
-        assertEquals(m1+m2+m3, client.read());
+        assertEquals(m1 + m2 + m3, client.read());
     }
 
 }

@@ -63,11 +63,9 @@ public class RequestDispatcher implements Executable {
                 }
             }
         } catch (ClosedChannelException closed_e) {
-            server.newDisconnection();
-            selectedKey.cancel();
+            onStop();
         } catch (IOException e) {
-            server.newDisconnection();
-            selectedKey.cancel();
+            onStop();
         }
     }
 
@@ -82,18 +80,18 @@ public class RequestDispatcher implements Executable {
     private void read(SelectionKey key) throws IOException {
         Client client = new Client((SocketChannel) key.channel());
         String request = "";
-        int readedBytes;
-
-        buffer.clear();
-        readedBytes = client.getChannel().read(buffer);
-        buffer.flip();
+        int readedBytes = 1;
 
         while (readedBytes > 0) {
-            request += new String(buffer.array(), buffer.position(), buffer.remaining());
-            /** If more to read, keep building the request */
             buffer.clear();
             readedBytes = client.getChannel().read(buffer);
             buffer.flip();
+            if (readedBytes == -1) {
+                key.cancel();
+                server.newDisconnection(client);
+                return;
+            }
+            request += new String(buffer.array(), buffer.position(), buffer.remaining());
         }
 
         /** Fetch attachment and append the readed content */
