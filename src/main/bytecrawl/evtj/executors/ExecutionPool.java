@@ -16,7 +16,6 @@ public class ExecutionPool implements Executable {
 
     private BlockingQueue<Runnable> runnableQueue = new ArrayBlockingQueue<Runnable>(1000);
     private ExecutorService workerPool;
-    private Runnable currentRunnable;
 
     public ExecutionPool() {
         int size = Configuration.getInt(Configuration.CFG_WORKER_POOL);
@@ -33,7 +32,7 @@ public class ExecutionPool implements Executable {
 
     public void onRun() {
         try {
-            currentRunnable = runnableQueue.take();
+            Runnable currentRunnable = runnableQueue.take();
             workerPool.execute(currentRunnable);
         } catch (InterruptedException e) {
 
