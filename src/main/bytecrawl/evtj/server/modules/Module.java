@@ -1,47 +1,17 @@
 package bytecrawl.evtj.server.modules;
 
-import bytecrawl.evtj.server.requests.Client;
 import bytecrawl.evtj.server.requests.Request;
 
-import java.io.IOException;
-import java.nio.CharBuffer;
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetEncoder;
+public interface Module {
 
-public abstract class Module implements Runnable, ModuleInterface {
+    public void onPause();
 
-    private Request request;
-    private CharsetEncoder encoder;
+    public void onResume();
 
-    public Module() {
-        this.encoder = Charset.forName("UTF-8").newEncoder();
-    }
+    public void onStart();
 
-    public Request getRequest() {
-        return request;
-    }
+    public void onStop();
 
-    public void setRequest(Request request) {
-        this.request = request;
-    }
-
-    public void respondTo(Client recipient, String msg) {
-        try {
-            recipient.getChannel().write(
-                    encoder.encode(CharBuffer.wrap(msg)));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public abstract void serveRequest(Client client, String request);
-
-    public void run() {
-        serveRequest(request.getClient(), request.getRequest());
-    }
-
-    public Module getWorker() throws IllegalAccessException, InstantiationException {
-        return getClass().newInstance();
-    }
+    public void serveRequest(Request request);
 
 }

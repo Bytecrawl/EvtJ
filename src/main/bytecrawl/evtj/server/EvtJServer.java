@@ -5,6 +5,7 @@ import bytecrawl.evtj.config.ConfigurationException;
 import bytecrawl.evtj.executors.ExecutionPool;
 import bytecrawl.evtj.executors.ExecutionThread;
 import bytecrawl.evtj.server.modules.Module;
+import bytecrawl.evtj.server.modules.ModuleRunnable;
 import bytecrawl.evtj.server.requests.Client;
 import bytecrawl.evtj.server.requests.Request;
 import bytecrawl.evtj.server.requests.RequestDispatcher;
@@ -103,17 +104,9 @@ public class EvtJServer {
      * by passing a custom module worker for said request.
      */
     public synchronized void queue(Request request) {
-        ExecutionPool handler = (ExecutionPool) workerPoolExecutor.getExecutable();
-        Module worker;
-        try {
-            worker = module.getWorker();
-            worker.setRequest(request);
-            handler.pushTask(worker);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        }
+        ExecutionPool pool = (ExecutionPool) workerPoolExecutor.getExecutable();
+        ModuleRunnable runnable = new ModuleRunnable(module, request);
+        pool.pushTask(runnable);
     }
 
     public void resume() {

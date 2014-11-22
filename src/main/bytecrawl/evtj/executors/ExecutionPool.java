@@ -1,6 +1,8 @@
 package bytecrawl.evtj.executors;
 
 import bytecrawl.evtj.config.Configuration;
+import bytecrawl.evtj.server.modules.Module;
+import bytecrawl.evtj.server.modules.ModuleRunnable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,7 +15,7 @@ public class ExecutionPool implements Executable {
 
     private Logger logger = LoggerFactory.getLogger("EvtJServer");
 
-    private BlockingQueue<Runnable> runnableQueue = new ArrayBlockingQueue<Runnable>(1000);
+    private BlockingQueue<ModuleRunnable> runnableQueue = new ArrayBlockingQueue<ModuleRunnable>(1000);
     private ExecutorService workerPool;
 
     public ExecutionPool() {
@@ -31,8 +33,8 @@ public class ExecutionPool implements Executable {
 
     public void onRun() {
         try {
-            Runnable currentRunnable = runnableQueue.take();
-            workerPool.execute(currentRunnable);
+            ModuleRunnable runnable = runnableQueue.take();
+            workerPool.execute(runnable);
         } catch (InterruptedException e) {
 
         }
@@ -42,7 +44,7 @@ public class ExecutionPool implements Executable {
         workerPool.shutdown();
     }
 
-    public void pushTask(Runnable r) {
+    public void pushTask(ModuleRunnable r) {
         runnableQueue.add(r);
     }
 

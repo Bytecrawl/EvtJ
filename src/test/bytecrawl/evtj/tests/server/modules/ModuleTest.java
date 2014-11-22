@@ -4,6 +4,7 @@ import bytecrawl.evtj.config.ConfigurationException;
 import bytecrawl.evtj.server.EvtJServer;
 import bytecrawl.evtj.server.modules.Module;
 import bytecrawl.evtj.server.requests.Client;
+import bytecrawl.evtj.server.requests.Request;
 import org.junit.After;
 import org.junit.Before;
 import org.slf4j.Logger;
@@ -109,7 +110,7 @@ public class ModuleTest {
 
     }
 
-    public class CounterModule extends Module {
+    public class CounterModule implements Module {
 
         private int pauses, resumes, starts, stops;
 
@@ -140,11 +141,6 @@ public class ModuleTest {
             return stops;
         }
 
-        @Override
-        public void serveRequest(Client client, String request) {
-
-        }
-
         public void onPause() {
             pauses++;
         }
@@ -160,6 +156,12 @@ public class ModuleTest {
         public void onStop() {
             stops++;
         }
+
+        @Override
+        public void serveRequest(Request request) {
+
+        }
+
     }
 
 }
