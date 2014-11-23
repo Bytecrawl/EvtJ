@@ -76,14 +76,14 @@ public class EvtJServerTest {
 
     @Test
     public void ServerGetConnectedClients() {
-        assertEquals(server.getConnectedClients(), 0);
+        assertEquals(state.getConnections(), 0);
     }
 
     @Test
     public void ServerAcceptedConnection() {
-        assertEquals(server.getConnectedClients(), 0);
-        server.newAcceptedConnection(client);
-        assertEquals(server.getConnectedClients(), 1);
+        assertEquals(state.getConnections(), 0);
+        state.newConnection(client);
+        assertEquals(state.getConnections(), 1);
     }
 
 }

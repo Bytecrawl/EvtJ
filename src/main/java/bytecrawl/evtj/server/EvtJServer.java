@@ -22,7 +22,6 @@ public class EvtJServer {
 
     private Logger logger = LoggerFactory.getLogger("EvtJServer");
 
-    private int clientsConnected;
     private int port;
 
     private ServerSocketChannel serverChannel;
@@ -38,7 +37,6 @@ public class EvtJServer {
     private ExecutionPool executionPool;
 
     public EvtJServer(int port, Module module) {
-        this.clientsConnected = 0;
         this.port = port;
         this.module = module;
         this.state = new State();
@@ -48,7 +46,6 @@ public class EvtJServer {
     }
 
     public EvtJServer(int port, Module module, String configurationPath) throws ConfigurationException {
-        this.clientsConnected = 0;
         this.port = port;
         this.module = module;
         this.state = new State();
@@ -59,10 +56,6 @@ public class EvtJServer {
 
     public State getState() {
         return state;
-    }
-
-    public int getConnectedClients() {
-        return clientsConnected;
     }
 
     public synchronized Module getModule() {
@@ -79,21 +72,6 @@ public class EvtJServer {
         serverChannel.configureBlocking(false);
         serverChannel.socket().bind(new InetSocketAddress(port));
         serverChannel.register(selector, SelectionKey.OP_ACCEPT);
-    }
-
-    public synchronized void newAcceptedConnection(Client client) {
-        clientsConnected++;
-        logger.info("Connection accepted from " + client.getAddress() +
-                " [ " + clientsConnected + " online clients ]");
-    }
-
-    public synchronized void newDisconnection(Client client) {
-        clientsConnected--;
-        logger.info("Disconnection from " + client.getAddress());
-    }
-
-    public synchronized void newServedRequest() {
-        clientsConnected++;
     }
 
     public synchronized void pause() {

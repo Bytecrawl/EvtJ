@@ -1,20 +1,28 @@
 package bytecrawl.evtj.server;
 
+import bytecrawl.evtj.server.requests.Client;
+import bytecrawl.evtj.server.requests.Request;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class State {
+    private Logger logger = LoggerFactory.getLogger(getClass().getName());
 
     private boolean active;
     private boolean paused;
     private boolean initialising;
+
     private int starts;
     private int stops;
     private int pauses;
     private int resumes;
     private int initialises;
 
+    private int connections;
+    private int servedRequests;
+
     public State() {
-
         loadInitialState();
-
     }
 
     private void loadInitialState() {
@@ -27,6 +35,9 @@ public class State {
         stops = 0;
         resumes = 0;
         initialises = 0;
+
+        connections = 0;
+        servedRequests = 0;
     }
 
     public void initialised() {
@@ -69,6 +80,22 @@ public class State {
         pauses++;
     }
 
+    public synchronized void newConnection(Client client) {
+        connections++;
+        logger.info("Connection accepted from " + client.getAddress() +
+                " [ " + connections + " online clients ]");
+    }
+
+    public synchronized void newServedRequest(Request request) {
+        servedRequests++;
+        logger.info("Request from " + request.getClient().getAddress() + ": " + request.getRequest());
+    }
+
+    public synchronized void newDisconnection(Client client) {
+        connections--;
+        logger.info("Disconnection from " + client.getAddress());
+    }
+
     public boolean isActive() {
         return active;
     }
@@ -101,8 +128,16 @@ public class State {
         return resumes;
     }
 
-    public int getInitialises() {
+    public int getInitializations() {
         return initialises;
+    }
+
+    public int getConnections() {
+        return connections;
+    }
+
+    public int getServedRequests() {
+        return servedRequests;
     }
 
 }

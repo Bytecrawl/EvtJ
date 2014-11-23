@@ -37,7 +37,7 @@ public class RequestDispatcher implements Executable {
         Client client = new Client(((ServerSocketChannel) key.channel()).accept());
         client.getChannel().configureBlocking(false);
         client.getChannel().register(server.getSelector(), SelectionKey.OP_READ);
-        server.newAcceptedConnection(client);
+        server.getState().newConnection(client);
         server.getModule().onAccept(client);
     }
 
@@ -91,7 +91,7 @@ public class RequestDispatcher implements Executable {
             buffer.flip();
             if (readedBytes == -1) {
                 key.cancel();
-                server.newDisconnection(client);
+                server.getState().newDisconnection(client);
                 return;
             }
             request += new String(buffer.array(), buffer.position(), buffer.remaining());
@@ -123,9 +123,8 @@ public class RequestDispatcher implements Executable {
 
         for (String requestText : requestList) {
             Request req = new Request(client, requestText);
-            server.newServedRequest();
             server.queue(req);
-            logger.info("Request from " + client.getAddress() + ": " + requestText);
+            server.getState().newServedRequest(req);
         }
     }
 
