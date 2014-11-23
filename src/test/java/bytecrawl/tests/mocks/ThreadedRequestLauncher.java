@@ -1,4 +1,4 @@
-package bytecrawl.evtj.tests.mocks;
+package bytecrawl.tests.mocks;
 
 
 import java.util.ArrayList;

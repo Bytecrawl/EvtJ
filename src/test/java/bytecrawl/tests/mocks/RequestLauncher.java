@@ -1,4 +1,4 @@
-package bytecrawl.evtj.tests.mocks;
+package bytecrawl.tests.mocks;
 
 import java.io.BufferedReader;
 import java.io.IOException;

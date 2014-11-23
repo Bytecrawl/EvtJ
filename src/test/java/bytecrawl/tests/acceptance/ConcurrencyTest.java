@@ -1,10 +1,10 @@
-package bytecrawl.evtj.tests.acceptance;
+package bytecrawl.tests.acceptance;
 
 import bytecrawl.evtj.config.ConfigurationException;
 import bytecrawl.evtj.server.EvtJServer;
 import bytecrawl.evtj.server.modules.Module;
-import bytecrawl.evtj.tests.mocks.*;
-import bytecrawl.evtj.tests.mocks.modules.ConcurrentModule;
+import bytecrawl.tests.mocks.ThreadedRequestLauncher;
+import bytecrawl.tests.mocks.modules.ConcurrentModule;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

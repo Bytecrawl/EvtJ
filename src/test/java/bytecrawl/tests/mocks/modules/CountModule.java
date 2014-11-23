@@ -1,11 +1,7 @@
-package bytecrawl.evtj.tests.mocks.modules;
+package bytecrawl.tests.mocks.modules;
 
 import bytecrawl.evtj.server.modules.Module;
-import bytecrawl.evtj.server.requests.Client;
 import bytecrawl.evtj.server.requests.Request;
-
-import java.io.IOException;
-import java.nio.ByteBuffer;
 
 public class CountModule implements Module {
 

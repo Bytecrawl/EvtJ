@@ -1,9 +1,9 @@
-package bytecrawl.evtj.tests.acceptance;
+package bytecrawl.tests.acceptance;
 
 import bytecrawl.evtj.config.ConfigurationException;
 import bytecrawl.evtj.server.EvtJServer;
-import bytecrawl.evtj.tests.mocks.modules.EchoModule;
-import bytecrawl.evtj.tests.mocks.RequestLauncher;
+import bytecrawl.tests.mocks.modules.EchoModule;
+import bytecrawl.tests.mocks.RequestLauncher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

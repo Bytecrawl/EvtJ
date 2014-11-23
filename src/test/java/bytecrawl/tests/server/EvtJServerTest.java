@@ -1,11 +1,11 @@
-package bytecrawl.evtj.tests.server;
+package bytecrawl.tests.server;
 
 import bytecrawl.evtj.config.ConfigurationException;
 import bytecrawl.evtj.server.EvtJServer;
 import bytecrawl.evtj.server.State;
 import bytecrawl.evtj.server.modules.Module;
 import bytecrawl.evtj.server.requests.Client;
-import bytecrawl.evtj.tests.mocks.MockModule;
+import bytecrawl.tests.mocks.MockModule;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

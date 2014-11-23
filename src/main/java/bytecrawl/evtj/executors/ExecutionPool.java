@@ -1,7 +1,6 @@
 package bytecrawl.evtj.executors;
 
 import bytecrawl.evtj.config.Configuration;
-import bytecrawl.evtj.server.modules.Module;
 import bytecrawl.evtj.server.modules.ModuleRunnable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

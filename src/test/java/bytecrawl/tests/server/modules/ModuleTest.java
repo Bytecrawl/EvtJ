@@ -1,8 +1,8 @@
-package bytecrawl.evtj.tests.server.modules;
+package bytecrawl.tests.server.modules;
 
 import bytecrawl.evtj.config.ConfigurationException;
 import bytecrawl.evtj.server.EvtJServer;
-import bytecrawl.evtj.tests.mocks.modules.CountModule;
+import bytecrawl.tests.mocks.modules.CountModule;
 import org.junit.After;
 import org.junit.Before;
 import org.slf4j.Logger;
@@ -24,7 +24,7 @@ public class ModuleTest {
 
     @Before
     public final void setUp() throws ConfigurationException {
-        server = new EvtJServer(4000, countModule, "src/evtj.xml");
+        server = new EvtJServer(4000, countModule);
         server.start();
     }
 

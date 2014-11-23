@@ -1,4 +1,4 @@
-package bytecrawl.evtj.tests.config;
+package bytecrawl.tests.config;
 
 import bytecrawl.evtj.config.Configuration;
 import bytecrawl.evtj.config.ConfigurationException;
@@ -12,7 +12,7 @@ public class ConfigurationTest {
     @Test
     public void testFileOpen() {
         try {
-            Configuration.newConfiguration("src/evtj.xml");
+            Configuration.newConfiguration("src/test/resources/evtj.xml");
         } catch (ConfigurationException e) {
             fail("Exception thrown");
         }
@@ -21,7 +21,7 @@ public class ConfigurationTest {
     @Test
     public void testFileParse() {
         try {
-            Configuration.newConfiguration("src/evtj.xml");
+            Configuration.newConfiguration("src/test/resources/evtj.xml");
             assertEquals("11", Configuration.get(Configuration.CFG_WORKER_POOL));
             assertEquals("1025", Configuration.get(Configuration.CFG_BUFFER_SIZE));
             assertEquals("\\r\\n", Configuration.get(Configuration.CFG_SPLIT_SEQUENCE));

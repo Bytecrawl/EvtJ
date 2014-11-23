@@ -1,11 +1,11 @@
-package bytecrawl.evtj.tests.executors;
+package bytecrawl.tests.executors;
 
 
 import bytecrawl.evtj.config.ConfigurationException;
 import bytecrawl.evtj.executors.ExecutionThread;
 import bytecrawl.evtj.server.EvtJServer;
-import bytecrawl.evtj.tests.mocks.MockExecutable;
-import bytecrawl.evtj.tests.mocks.MockModule;
+import bytecrawl.tests.mocks.MockExecutable;
+import bytecrawl.tests.mocks.MockModule;
 import org.junit.After;
 import org.junit.Before;
 
