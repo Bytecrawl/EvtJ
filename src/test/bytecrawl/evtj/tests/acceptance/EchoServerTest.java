@@ -2,8 +2,8 @@ package bytecrawl.evtj.tests.acceptance;
 
 import bytecrawl.evtj.config.ConfigurationException;
 import bytecrawl.evtj.server.EvtJServer;
-import bytecrawl.evtj.tests.mocks.EchoModule;
-import bytecrawl.evtj.tests.mocks.MockClient;
+import bytecrawl.evtj.tests.mocks.modules.EchoModule;
+import bytecrawl.evtj.tests.mocks.RequestLauncher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +14,7 @@ public class EchoServerTest {
 
     private EvtJServer server;
     private EchoModule module;
-    private MockClient client;
+    private RequestLauncher client;
 
     @Before
     public final void setUp() throws ConfigurationException {
@@ -30,7 +30,7 @@ public class EchoServerTest {
 
     @Test
     public void testEchoIsCorrect() {
-        client = new MockClient(4000);
+        client = new RequestLauncher(4000);
         String message = "Hello world !";
         client.send(message+"\n");
         assertEquals(message, client.read());
@@ -38,7 +38,7 @@ public class EchoServerTest {
 
     @Test
     public void testEchoIsCorrectOnMultipleWrites() {
-        client = new MockClient(4000);
+        client = new RequestLauncher(4000);
         String m1 = "Hello ";
         String m2 = "World ";
         String m3 = "!";
@@ -52,7 +52,7 @@ public class EchoServerTest {
 
     @Test
     public void testEchoIsCorrectOnHalfRequest() {
-        client = new MockClient(4000);
+        client = new RequestLauncher(4000);
         client.send("Complete request\nHalf ");
         assertEquals("Complete request", client.read());
         client.send("request\n");

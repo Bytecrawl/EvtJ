@@ -2,9 +2,7 @@ package bytecrawl.evtj.tests.server.modules;
 
 import bytecrawl.evtj.config.ConfigurationException;
 import bytecrawl.evtj.server.EvtJServer;
-import bytecrawl.evtj.server.modules.Module;
-import bytecrawl.evtj.server.requests.Client;
-import bytecrawl.evtj.server.requests.Request;
+import bytecrawl.evtj.tests.mocks.modules.CountModule;
 import org.junit.After;
 import org.junit.Before;
 import org.slf4j.Logger;
@@ -18,15 +16,15 @@ public class ModuleTest {
             LoggerFactory.getLogger(ModuleTest.class);
 
     private EvtJServer server;
-    private CounterModule counterModule;
+    private CountModule countModule;
 
     public ModuleTest() {
-        counterModule = new CounterModule();
+        countModule = new CountModule();
     }
 
     @Before
     public final void setUp() throws ConfigurationException {
-        server = new EvtJServer(4000, counterModule, "src/evtj.xml");
+        server = new EvtJServer(4000, countModule, "src/evtj.xml");
         server.start();
     }
 
@@ -40,127 +38,73 @@ public class ModuleTest {
     public void moduleWorkflowIntegrityTest() {
 
         server.start();
-        assertEquals(1, counterModule.getStarts());
+        assertEquals(1, countModule.getStarts());
         server.start();
-        assertEquals(1, counterModule.getStarts());
+        assertEquals(1, countModule.getStarts());
 
         server.pause();
-        assertEquals(1, counterModule.getPauses());
+        assertEquals(1, countModule.getPauses());
         server.pause();
-        assertEquals(1, counterModule.getPauses());
+        assertEquals(1, countModule.getPauses());
 
         server.resume();
-        assertEquals(1, counterModule.getResumes());
+        assertEquals(1, countModule.getResumes());
 
         server.stop();
-        assertEquals(1, counterModule.getStops());
+        assertEquals(1, countModule.getStops());
         server.stop();
-        assertEquals(1, counterModule.getStops());
+        assertEquals(1, countModule.getStops());
 
         server.resume();
-        assertEquals(1, counterModule.getStops());
+        assertEquals(1, countModule.getStops());
 
         server.stop();
-        assertEquals(1, counterModule.getStops());
+        assertEquals(1, countModule.getStops());
 
         server.start();
         server.pause();
         server.resume();
         server.stop();
-        assertEquals(2, counterModule.getStops());
-        assertEquals(2, counterModule.getStarts());
-        assertEquals(2, counterModule.getResumes());
-        assertEquals(2, counterModule.getPauses());
+        assertEquals(2, countModule.getStops());
+        assertEquals(2, countModule.getStarts());
+        assertEquals(2, countModule.getResumes());
+        assertEquals(2, countModule.getPauses());
     }
 
     @org.junit.Test
     public void serverStatsConsistency() {
         server.start();
-        assertEquals(server.getState().getStarts(), counterModule.getStarts());
+        assertEquals(server.getState().getStarts(), countModule.getStarts());
         server.start();
-        assertEquals(server.getState().getStarts(), counterModule.getStarts());
+        assertEquals(server.getState().getStarts(), countModule.getStarts());
 
         server.pause();
-        assertEquals(server.getState().getPauses(), counterModule.getPauses());
+        assertEquals(server.getState().getPauses(), countModule.getPauses());
         server.pause();
-        assertEquals(server.getState().getPauses(), counterModule.getPauses());
+        assertEquals(server.getState().getPauses(), countModule.getPauses());
 
         server.resume();
-        assertEquals(server.getState().getResumes(), counterModule.getResumes());
+        assertEquals(server.getState().getResumes(), countModule.getResumes());
 
         server.stop();
-        assertEquals(server.getState().getStops(), counterModule.getStops());
+        assertEquals(server.getState().getStops(), countModule.getStops());
         server.stop();
-        assertEquals(server.getState().getStops(), counterModule.getStops());
+        assertEquals(server.getState().getStops(), countModule.getStops());
 
         server.resume();
-        assertEquals(server.getState().getResumes(), counterModule.getStops());
+        assertEquals(server.getState().getResumes(), countModule.getStops());
 
         server.stop();
-        assertEquals(server.getState().getStops(), counterModule.getStops());
+        assertEquals(server.getState().getStops(), countModule.getStops());
 
         server.start();
         server.pause();
         server.resume();
         server.stop();
-        assertEquals(server.getState().getStops(), counterModule.getStops());
-        assertEquals(server.getState().getStarts(), counterModule.getStarts());
-        assertEquals(server.getState().getResumes(), counterModule.getResumes());
-        assertEquals(server.getState().getPauses(), counterModule.getPauses());
-
-    }
-
-    public class CounterModule implements Module {
-
-        private int pauses, resumes, starts, stops;
-
-        public CounterModule() {
-            reset();
-        }
-
-        public void reset() {
-            pauses = 0;
-            resumes = 0;
-            starts = 0;
-            stops = 0;
-        }
-
-        public int getPauses() {
-            return pauses;
-        }
-
-        public int getResumes() {
-            return resumes;
-        }
-
-        public int getStarts() {
-            return starts;
-        }
-
-        public int getStops() {
-            return stops;
-        }
-
-        public void onPause() {
-            pauses++;
-        }
-
-        public void onResume() {
-            resumes++;
-        }
-
-        public void onStart() {
-            starts++;
-        }
-
-        public void onStop() {
-            stops++;
-        }
-
-        @Override
-        public void serveRequest(Request request) {
-
-        }
+        assertEquals(server.getState().getStops(), countModule.getStops());
+        assertEquals(server.getState().getStarts(), countModule.getStarts());
+        assertEquals(server.getState().getResumes(), countModule.getResumes());
+        assertEquals(server.getState().getPauses(), countModule.getPauses());
 
     }
 

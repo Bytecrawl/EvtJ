@@ -6,13 +6,13 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class MockClient {
+public class RequestLauncher {
 
     private Socket socket;
     private PrintWriter out;
     private BufferedReader in;
 
-    public MockClient(int port) {
+    public RequestLauncher(int port) {
         try {
             socket = new Socket("127.0.0.1", port);
             out = new PrintWriter(socket.getOutputStream());
