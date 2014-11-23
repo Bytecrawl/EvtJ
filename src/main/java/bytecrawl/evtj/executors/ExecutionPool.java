@@ -35,7 +35,7 @@ public class ExecutionPool implements Executable {
             ModuleRunnable runnable = runnableQueue.take();
             workerPool.execute(runnable);
         } catch (InterruptedException e) {
-
+            onStop();
         }
     }
 
