@@ -6,7 +6,6 @@ import bytecrawl.evtj.executors.ExecutionPool;
 import bytecrawl.evtj.executors.ExecutionThread;
 import bytecrawl.evtj.server.modules.Module;
 import bytecrawl.evtj.server.modules.ModuleRunnable;
-import bytecrawl.evtj.server.requests.Client;
 import bytecrawl.evtj.server.requests.Request;
 import bytecrawl.evtj.server.requests.RequestDispatcher;
 import org.slf4j.Logger;
@@ -89,7 +88,7 @@ public class EvtJServer {
     public synchronized void queue(Request request) {
         ExecutionPool pool = (ExecutionPool) workerPoolExecutor.getExecutable();
         ModuleRunnable runnable = new ModuleRunnable(module, request);
-        pool.pushTask(runnable);
+        pool.queue(runnable);
     }
 
     public void resume() {

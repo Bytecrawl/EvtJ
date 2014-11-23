@@ -43,8 +43,8 @@ public class ExecutionPool implements Executable {
         workerPool.shutdown();
     }
 
-    public void pushTask(ModuleRunnable r) {
-        runnableQueue.add(r);
+    public void queue(ModuleRunnable runnable) {
+        runnableQueue.add(runnable);
     }
 
 }
