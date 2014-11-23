@@ -1,6 +1,7 @@
 package bytecrawl.tests.mocks;
 
 import bytecrawl.evtj.server.modules.Module;
+import bytecrawl.evtj.server.requests.Client;
 import bytecrawl.evtj.server.requests.Request;
 
 
@@ -24,6 +25,11 @@ public class MockModule implements Module {
 
     @Override
     public void serveRequest(Request request) {
+
+    }
+
+    @Override
+    public void onAccept(Client client) {
 
     }
 }

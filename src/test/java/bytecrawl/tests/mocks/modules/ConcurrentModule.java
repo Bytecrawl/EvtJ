@@ -43,6 +43,11 @@ public class ConcurrentModule implements Module {
         }
     }
 
+    @Override
+    public void onAccept(Client client) {
+
+    }
+
     public synchronized void increase() {
         counter += 1;
     }

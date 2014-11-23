@@ -39,4 +39,9 @@ public class EchoModule implements Module {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void onAccept(Client client) {
+
+    }
 }

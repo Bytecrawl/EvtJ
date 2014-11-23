@@ -1,5 +1,6 @@
 package bytecrawl.evtj.server.modules;
 
+import bytecrawl.evtj.server.requests.Client;
 import bytecrawl.evtj.server.requests.Request;
 
 public interface Module {
@@ -13,5 +14,7 @@ public interface Module {
     public void onStop();
 
     public void serveRequest(Request request);
+
+    public void onAccept(Client client);
 
 }

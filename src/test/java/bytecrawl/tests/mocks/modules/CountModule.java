@@ -1,6 +1,7 @@
 package bytecrawl.tests.mocks.modules;
 
 import bytecrawl.evtj.server.modules.Module;
+import bytecrawl.evtj.server.requests.Client;
 import bytecrawl.evtj.server.requests.Request;
 
 public class CountModule implements Module {
@@ -56,6 +57,11 @@ public class CountModule implements Module {
 
     @Override
     public void serveRequest(Request req) {
+
+    }
+
+    @Override
+    public void onAccept(Client client) {
 
     }
 

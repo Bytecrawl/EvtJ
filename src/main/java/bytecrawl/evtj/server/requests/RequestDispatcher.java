@@ -21,12 +21,10 @@ public class RequestDispatcher implements Executable {
     private ByteBuffer buffer = ByteBuffer.allocate(BUFFER_SIZE);
     private Logger logger = LoggerFactory.getLogger("EvtJServer");
     private SelectionKey selectedKey;
-    private Selector selector;
     private EvtJServer server;
 
     public RequestDispatcher(EvtJServer server) {
         this.server = server;
-        this.selector = server.getSelector();
     }
 
     /**
@@ -38,8 +36,9 @@ public class RequestDispatcher implements Executable {
     private void accept(SelectionKey key) throws IOException {
         Client client = new Client(((ServerSocketChannel) key.channel()).accept());
         client.getChannel().configureBlocking(false);
-        client.getChannel().register(selector, SelectionKey.OP_READ);
+        client.getChannel().register(server.getSelector(), SelectionKey.OP_READ);
         server.newAcceptedConnection(client);
+        server.getModule().onAccept(client);
     }
 
     public void onPause() {
@@ -51,6 +50,7 @@ public class RequestDispatcher implements Executable {
     }
 
     public void onRun() {
+        Selector selector = server.getSelector();
         try {
             selector.select();
             Iterator<SelectionKey> selectorIterator = selector.selectedKeys().iterator();
@@ -74,7 +74,7 @@ public class RequestDispatcher implements Executable {
 
     public void onStop() {
         try {
-            selector.close();
+            server.getSelector().close();
         } catch (IOException e) {
             logger.error("Error closing the selector", e);
         }
