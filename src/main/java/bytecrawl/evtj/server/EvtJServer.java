@@ -20,15 +20,22 @@ import java.nio.channels.ServerSocketChannel;
 
 public class EvtJServer {
 
+    private Logger logger = LoggerFactory.getLogger("EvtJServer");
+
     private int clientsConnected;
+    private int port;
+
     private ServerSocketChannel serverChannel;
     private Selector selector;
+
+    private Module module;
+    private State state;
+
+    /** Threaded executors, and executables */
     private ExecutionThread dispatcherExecutor;
     private ExecutionThread workerPoolExecutor;
-    private Module module;
-    private int port;
-    private Logger logger = LoggerFactory.getLogger("EvtJServer");
-    private State state;
+    private RequestDispatcher requestDispatcher;
+    private ExecutionPool executionPool;
 
     public EvtJServer(int port, Module module) {
         this.clientsConnected = 0;
@@ -36,6 +43,8 @@ public class EvtJServer {
         this.module = module;
         this.state = new State();
         Configuration.newConfiguration();
+        executionPool = new ExecutionPool();
+        requestDispatcher = new RequestDispatcher(this);
     }
 
     public EvtJServer(int port, Module module, String configurationPath) throws ConfigurationException {
@@ -44,13 +53,15 @@ public class EvtJServer {
         this.module = module;
         this.state = new State();
         Configuration.newConfiguration(configurationPath);
+        executionPool = new ExecutionPool();
+        requestDispatcher = new RequestDispatcher(this);
     }
 
-    public synchronized State getState() {
+    public State getState() {
         return state;
     }
 
-    public synchronized int getConnectedClients() {
+    public int getConnectedClients() {
         return clientsConnected;
     }
 
@@ -58,11 +69,12 @@ public class EvtJServer {
         return module;
     }
 
-    public synchronized Selector getSelector() {
+    public Selector getSelector() {
         return selector;
     }
 
     private void channelInitialize(int port) throws IOException {
+        selector = Selector.open();
         serverChannel = ServerSocketChannel.open();
         serverChannel.configureBlocking(false);
         serverChannel.socket().bind(new InetSocketAddress(port));
@@ -84,18 +96,11 @@ public class EvtJServer {
         clientsConnected++;
     }
 
-    private void selectorOpen() throws IOException {
-        selector = Selector.open();
-    }
-
     public synchronized void pause() {
         if (state.isPaused()) return;
-
-        module.onPause();
-        executorsPause();
-
         state.paused();
-
+        module.onPause();
+        pauseExecutors();
         logger.info("Server paused");
     }
 
@@ -110,15 +115,13 @@ public class EvtJServer {
     }
 
     public void resume() {
-        if (!state.isPaused()) {
+        if (state.isStopped()) {
             logger.warn("Server is stopped, can't resume");
             return;
         }
-
-        module.onResume();
-        executorsResume();
-
         state.resumed();
+        module.onResume();
+        resumeExecutors();
     }
 
     public void start() {
@@ -126,77 +129,60 @@ public class EvtJServer {
             logger.warn("Server is already running");
             return;
         }
-
         state.initialised();
-
         try {
-
-            selectorOpen();
             channelInitialize(port);
+            startExecutors();
             module.onStart();
-            executorsStart();
-
             state.started();
-
             logger.info("Server started");
-
         } catch (IOException e) {
             logger.error("EvtJServer could not bind the port " + port, e);
             System.exit(1);
         }
     }
 
-    private void executorsStart() {
-        ExecutionPool executionPool = new ExecutionPool();
-        RequestDispatcher requestDispatcher = new RequestDispatcher(this);
-
+    private void startExecutors() {
         workerPoolExecutor = new ExecutionThread(state, executionPool);
         dispatcherExecutor = new ExecutionThread(state, requestDispatcher);
-
         workerPoolExecutor.start();
         dispatcherExecutor.start();
-
-        while (!workerPoolExecutor.isAlive()) {
-        }
-        while (!dispatcherExecutor.isAlive()) {
-        }
     }
 
     public void stop() {
-        if (!state.isActive()) {
+        if (state.isStopped()) {
             logger.warn("Server is already stopped");
             return;
         }
-
         state.stopped();
-
         module.onStop();
-        executorsStop();
-
+        stopExecutors();
         try {
             serverChannel.close();
+            selector.close();
         } catch (IOException e) {
-            logger.error("Unknown error closing ServerSocketChannel", e);
+            e.printStackTrace();
         }
-
         logger.info("Server stopped");
     }
 
-    private void executorsStop() {
-        dispatcherExecutor.interrupt();
-        workerPoolExecutor.interrupt();
-        while (dispatcherExecutor.isAlive()) {
-        }
-        while (workerPoolExecutor.isAlive()) {
+    private void stopExecutors() {
+        try {
+            dispatcherExecutor.interrupt();
+            workerPoolExecutor.interrupt();
+            dispatcherExecutor.join();
+            workerPoolExecutor.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
-    private void executorsPause() {
+    private void pauseExecutors() {
         dispatcherExecutor.pause();
         workerPoolExecutor.pause();
     }
 
-    private void executorsResume() {
+    private void resumeExecutors() {
         dispatcherExecutor.unpause();
         workerPoolExecutor.unpause();
     }
